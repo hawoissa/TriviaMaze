@@ -4,14 +4,10 @@
  *  Course: TCSS 360
  */
 package GUIView;
-
-
 import Model.Maze;
-
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
-
 /**
  * This class shows a frame of x by y pixels and will hold all the relevant stuff.
  */
@@ -26,6 +22,8 @@ public class Frame extends JFrame {
     private final ToolBar myToolBar;
     private MazePanel myMazePanel;
 
+    private QAPanel myFrameQAPanel;
+
     private Maze myMaze;
 
     /**
@@ -34,11 +32,20 @@ public class Frame extends JFrame {
     public Frame() throws IOException {
         myMaze = new Maze();
         myToolBar = new ToolBar();
-        myMazePanel = new MazePanel(myMaze);
+        myFrameQAPanel = new QAPanel(myMaze);
+        myMazePanel = new MazePanel(myMaze, myFrameQAPanel);
+
+        myMazePanel = new MazePanel(myMaze, myFrameQAPanel);
+
 
         buildFrame();
         this.add(myMazePanel.getMyMazePanel(), BorderLayout.CENTER);
+
+        this.add(myMazePanel.getMyMazePanel(), BorderLayout.SOUTH);
+
+        this.add(myFrameQAPanel.getQAPanel(), BorderLayout.EAST);
         addToolBar();
+
     }
 
     /**
@@ -47,21 +54,19 @@ public class Frame extends JFrame {
     private void addToolBar() {
         //this.add(myToolBar.getMenu());
         this.add(myToolBar.getToolBar());
+
     }
 
     /**
      * Builds a frame with two colors.
      */
     private void buildFrame() {
-
         setSize(MY_WEIGHT,MY_HEIGHT);
         setTitle("Trivia Maze Game");
         setResizable(false);
         setLocationRelativeTo(null);
         setColorOfFrame();
-
     }
-
     /**
      * Private method to set the color of the frame.
      */
@@ -85,5 +90,4 @@ public class Frame extends JFrame {
             }
         });
     }
-
 }
