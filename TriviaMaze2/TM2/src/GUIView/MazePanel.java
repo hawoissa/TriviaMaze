@@ -1,7 +1,6 @@
 package GUIView;
 
 import Model.Maze;
-import Model.QuestionAnswer;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -18,7 +17,6 @@ import java.util.Map;
 public class MazePanel extends JPanel {
 
     private JPanel myMazePanel;
-    private QAPanel myCurrentQAPanel;
 
 
     private JButton myButton = new JButton("arrow");
@@ -31,9 +29,9 @@ public class MazePanel extends JPanel {
             { 'M', 'N', 'O', 'P' }
     };
 
-    public MazePanel(final Maze theMaze, final QAPanel theQAPanel) throws IOException {
+    public MazePanel(final Maze theMaze) throws IOException {
         myMaze = theMaze;
-        myCurrentQAPanel = theQAPanel;
+
         myMazePanel = new JPanel();
         GridLayout myGD = new GridLayout(4, 4);
         myMazePanel.setLayout(myGD);
@@ -99,21 +97,16 @@ public class MazePanel extends JPanel {
 
                 if (label == "↑") {
                     myMaze.moveUp();
-                    myCurrentQAPanel.changeRoomLetter(myMaze.getMyCurrentRoom());
                     System.out.println(myMaze.getMyCurrentRoom().getLetter());
                 } else if (label == "↓") {
                     myMaze.moveDown();
-                    myCurrentQAPanel.changeRoomLetter(myMaze.getMyCurrentRoom());
-
+                    setUpMazePanel(myMaze.getMyCurrentRoom().getLetter());
                     System.out.println(myMaze.getMyCurrentRoom().getLetter());
                 } else if (label == "←") {
                     myMaze.moveLeft();
-                    myCurrentQAPanel.changeRoomLetter(myMaze.getMyCurrentRoom());
                     System.out.println(myMaze.getMyCurrentRoom().getLetter());
                 } else if (label == "→") {
                     myMaze.moveRight();
-                    myCurrentQAPanel.changeRoomLetter(myMaze.getMyCurrentRoom());
-
                     System.out.println(myMaze.getMyCurrentRoom().getLetter());
                 }
             }
