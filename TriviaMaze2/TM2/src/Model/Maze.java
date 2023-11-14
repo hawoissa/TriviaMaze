@@ -18,8 +18,8 @@ public class Maze implements Serializable {
     private int myY;
 
     public Maze() {
-        myX = 4;
-        myY = 4;
+        myX = 0;
+        myY = 0;
 
         myMaze = new Room[4][4];
 
