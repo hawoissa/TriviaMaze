@@ -22,7 +22,11 @@ public class Frame extends JFrame {
     private final ToolBar myToolBar;
     private MazePanel myMazePanel;
 
+    private StatsPanel myStatsPanel;
+
     private QAPanel myFrameQAPanel;
+
+    private ControlsPanel myControlPanel;
 
     private Maze myMaze;
 
@@ -32,18 +36,29 @@ public class Frame extends JFrame {
     public Frame() throws IOException {
         myMaze = new Maze();
         myToolBar = new ToolBar();
-        myFrameQAPanel = new QAPanel(myMaze);
+        myStatsPanel = new StatsPanel(myMaze);
         myMazePanel = new MazePanel(myMaze, myFrameQAPanel);
 
+        myFrameQAPanel = new QAPanel(myMaze);
+
         myMazePanel = new MazePanel(myMaze, myFrameQAPanel);
+
+        myControlPanel = new ControlsPanel();
+
 
 
         buildFrame();
-        this.add(myMazePanel.getMyMazePanel(), BorderLayout.CENTER);
 
-        this.add(myMazePanel.getMyMazePanel(), BorderLayout.SOUTH);
 
-        this.add(myFrameQAPanel.getQAPanel(), BorderLayout.EAST);
+
+        this.add(myMazePanel.getMyMazePanel());
+
+        this.add(myStatsPanel.getMyStatsPanelPanel());
+
+        this.add(myControlPanel.getMyControlPanel());
+
+        this.add(myFrameQAPanel.getQAPanel());
+
         addToolBar();
 
     }
@@ -53,7 +68,7 @@ public class Frame extends JFrame {
      */
     private void addToolBar() {
         //this.add(myToolBar.getMenu());
-        this.add(myToolBar.getToolBar());
+        this.add(myToolBar, BorderLayout.NORTH);
 
     }
 
