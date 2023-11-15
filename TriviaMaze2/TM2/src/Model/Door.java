@@ -1,6 +1,8 @@
 package Model;
 
-public class Door implements DoorInterface {
+import java.io.Serializable;
+
+public class Door implements DoorInterface, Serializable {
     private boolean myIsLocked;
 
 

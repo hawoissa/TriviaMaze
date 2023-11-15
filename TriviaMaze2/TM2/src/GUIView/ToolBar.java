@@ -5,6 +5,8 @@
     Quarter: Winter 2023
  */
 package GUIView;
+import Model.Maze;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -113,23 +115,44 @@ public class ToolBar {
         addLoadGameListener(myLoad);
         addSaveGameListener(mySave);
     }
+
     /**
      * Sets action listener to Load game.
      * @param theSave is the load menu item.
      */
+
     private void addSaveGameListener(JMenuItem theSave) {
         theSave.addActionListener(theEvent -> {
-
+            String fileName = JOptionPane.showInputDialog("Enter a name for your saved game:");
+            if (fileName != null) {
+                String filePath = fileName + ".ser";
+                try {
+                    Maze myMaze = new Maze();
+                    myMaze.saveGame(filePath);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    JOptionPane.showMessageDialog(null,
+                        "Error saving the game: " + e.getMessage(),
+                        "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
         });
     }
 
-    /**
-     * Sets action listener to Load game.
-     * @param theLoad is the load menu item.
-     */
     private void addLoadGameListener(JMenuItem theLoad) {
         theLoad.addActionListener(theEvent -> {
-
+            String fileName = JOptionPane.showInputDialog("Enter saved game to reload:");
+            if (fileName != null) {
+                try {
+                    Maze myMaze = new Maze();
+                    myMaze = Maze.loadGame(fileName);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    JOptionPane.showMessageDialog(null,
+                        "Error loading the game: " + e.getMessage(), "Error",
+                        JOptionPane.ERROR_MESSAGE);
+                }
+            }
         });
     }
 
@@ -139,9 +162,11 @@ public class ToolBar {
      */
     private void addStartGameListener(JMenuItem theStart) {
         theStart.addActionListener(theEvent -> {
-
+            Maze myMaze = new Maze();
+            myMaze.startGame();
         });
     }
+
 
     /**
      * Exit from Game.

@@ -1,4 +1,4 @@
-package Model;
+/*package Model;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -15,4 +15,4 @@ class DoorTest {
     @org.junit.jupiter.api.Test
     void lock() {
     }
-}
+}*/

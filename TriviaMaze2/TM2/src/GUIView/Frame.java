@@ -4,14 +4,10 @@
  *  Course: TCSS 360
  */
 package GUIView;
-
-
 import Model.Maze;
-
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
-
 /**
  * This class shows a frame of x by y pixels and will hold all the relevant stuff.
  */
@@ -26,6 +22,16 @@ public class Frame extends JFrame {
     private final ToolBar myToolBar;
     private MazePanel myMazePanel;
 
+    private StatsPanel myStatsPanel;
+
+    private QAPanel myFrameQAPanel;
+
+    private ControlsPanel myControlPanel;
+
+    private UserPanel myUserPanel;
+
+    private TimerPanel myTimerPanel;
+
     private Maze myMaze;
 
     /**
@@ -34,11 +40,37 @@ public class Frame extends JFrame {
     public Frame() throws IOException {
         myMaze = new Maze();
         myToolBar = new ToolBar();
-        myMazePanel = new MazePanel(myMaze);
+        myStatsPanel = new StatsPanel(myMaze);
+        myMazePanel = new MazePanel(myMaze, myFrameQAPanel);
+
+        myFrameQAPanel = new QAPanel(myMaze);
+
+        myMazePanel = new MazePanel(myMaze, myFrameQAPanel);
+
+        myControlPanel = new ControlsPanel();
+
+        myUserPanel = new UserPanel(myMaze);
+
+        myTimerPanel = new TimerPanel(myMaze);
 
         buildFrame();
-        this.add(myMazePanel.getMyMazePanel(), BorderLayout.CENTER);
+
+
+
+        this.add(myMazePanel.getMyMazePanel());
+
+        this.add(myStatsPanel.getMyStatsPanelPanel());
+
+        this.add(myControlPanel.getMyControlPanel());
+
+        this.add(myFrameQAPanel.getQAPanel());
+
+        this.add(myUserPanel.getUserPanel(), BorderLayout.SOUTH);
+
+        this.add(myTimerPanel.getTimerLabel());
+
         addToolBar();
+
     }
 
     /**
@@ -46,22 +78,19 @@ public class Frame extends JFrame {
      */
     private void addToolBar() {
         //this.add(myToolBar.getMenu());
-        this.add(myToolBar.getToolBar());
+        this.add(myToolBar.getToolBar(), BorderLayout.NORTH);
     }
 
     /**
      * Builds a frame with two colors.
      */
     private void buildFrame() {
-
         setSize(MY_WEIGHT,MY_HEIGHT);
         setTitle("Trivia Maze Game");
         setResizable(false);
         setLocationRelativeTo(null);
         setColorOfFrame();
-
     }
-
     /**
      * Private method to set the color of the frame.
      */
@@ -85,5 +114,4 @@ public class Frame extends JFrame {
             }
         });
     }
-
 }
