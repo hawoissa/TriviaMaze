@@ -70,9 +70,7 @@ public class MazePanel extends JPanel {
         if (col < 3) {
             contentPanel.add(createArrowButton("←"), BorderLayout.EAST);
         }
-        // Add the letter label to the center of the content panel
         contentPanel.add(letterLabel, BorderLayout.CENTER);
-        // Add the content panel to the letter panel
         letterPanel.add(contentPanel, BorderLayout.CENTER);
         return letterPanel;
     }
@@ -82,8 +80,7 @@ public class MazePanel extends JPanel {
         arrowButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Handle arrow button click (e.g., navigate to the target cell)
-                // You can add your custom logic here
+
 
                 if (label == "↑") {
                     myMaze.moveUp();
@@ -106,8 +103,8 @@ public class MazePanel extends JPanel {
                 }
             }
         });
-        arrowButton.setBorder(new EmptyBorder(0, 0, 0, 0)); // Remove button border
-        arrowButton.setFont(new Font("Arial", Font.BOLD, 20)); // Adjust font size
+        arrowButton.setBorder(new EmptyBorder(0, 0, 0, 0));
+        arrowButton.setFont(new Font("Arial", Font.BOLD, 20));
         return arrowButton;
     }
     private void setUpMazePanel ( char start){
