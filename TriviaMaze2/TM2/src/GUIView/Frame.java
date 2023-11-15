@@ -28,6 +28,10 @@ public class Frame extends JFrame {
 
     private ControlsPanel myControlPanel;
 
+    private UserPanel myUserPanel;
+
+    private TimerPanel myTimerPanel;
+
     private Maze myMaze;
 
     /**
@@ -45,7 +49,9 @@ public class Frame extends JFrame {
 
         myControlPanel = new ControlsPanel();
 
+        myUserPanel = new UserPanel(myMaze);
 
+        myTimerPanel = new TimerPanel(myMaze);
 
         buildFrame();
 
@@ -59,6 +65,10 @@ public class Frame extends JFrame {
 
         this.add(myFrameQAPanel.getQAPanel());
 
+        this.add(myUserPanel.getUserPanel(), BorderLayout.SOUTH);
+
+        this.add(myTimerPanel.getTimerLabel());
+
         addToolBar();
 
     }
@@ -68,8 +78,7 @@ public class Frame extends JFrame {
      */
     private void addToolBar() {
         //this.add(myToolBar.getMenu());
-        this.add(myToolBar, BorderLayout.NORTH);
-
+        this.add(myToolBar.getToolBar(), BorderLayout.NORTH);
     }
 
     /**
