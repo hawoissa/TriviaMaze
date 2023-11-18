@@ -11,7 +11,7 @@ public class TestSystemSound {
                 System.out.println("1. Start, 2. Won, 3. Over, 4. Duration, 5. Won and End");
                 int num = input.nextInt();
                 if (num == 1) {
-                    SystemSound sound = new SystemSound(new File("mixkit-small-crowd-laugh-and-applause-422.wav"));
+                    SystemSound sound = new SystemSound(new File("Game-Opener.wav"));
                     //sound.gameStartSound();
                     sound.gameSounds();
                 } else if (num == 2) {

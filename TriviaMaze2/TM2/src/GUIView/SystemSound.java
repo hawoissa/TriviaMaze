@@ -46,7 +46,7 @@ public class SystemSound {
             if (myClip != null) { // if myClip is not empty
                 myClip.loop(Clip.LOOP_CONTINUOUSLY); // loop myClip continuously
                 myClip.start();                // start the clip
-                Thread.sleep(3000);     // play's the audio for 3 seconds
+                Thread.sleep(1700);     // play's the audio for 3 seconds
                 myClip.stop();               // Stop's the sound after 3 minutes
             }
         } catch (InterruptedException e){
