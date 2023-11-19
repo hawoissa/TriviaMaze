@@ -39,10 +39,10 @@ public class MazePanel extends JPanel {
         myMazePanel.setLayout(myGD);
         setUpMazePanel('A');
         myMazePanel.setPreferredSize(new Dimension(350, 350));
-        myMazePanel.setBackground(Color.ORANGE);
+        //myMazePanel.setBackground(Color.ORANGE);
         //highlightCurrentRoom();
     }
-    private JPanel createLetterPanel ( char letter, int row, int col){
+    private JPanel createLetterPanel ( char letter, int row, int col) throws IOException {
         JPanel letterPanel = new JPanel();
         letterPanel.setLayout(new BorderLayout());
         // Create a sub-panel for the arrows and letter
@@ -57,7 +57,7 @@ public class MazePanel extends JPanel {
         }
         JLabel letterLabel = new JLabel(Character.toString(letter), SwingConstants.CENTER);
         letterLabel.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 24));
-        // Add bidirectional arrow buttons to indicate connections
+
         if (row > 0) {
             contentPanel.add(createArrowButton("↓"), BorderLayout.NORTH);
         }
@@ -70,9 +70,32 @@ public class MazePanel extends JPanel {
         if (col < 3) {
             contentPanel.add(createArrowButton("←"), BorderLayout.EAST);
         }
+
+        if (myMaze.getMyCurrentRoom().getLetter() == letter) {
+
+            contentPanel.setBackground(Color.black);
+
+        }
+
+        if (myMaze.getMyCurrentRoom().getMyDoor().isLocked()) {
+            letterLabel.setText("X");
+        }
         contentPanel.add(letterLabel, BorderLayout.CENTER);
         letterPanel.add(contentPanel, BorderLayout.CENTER);
         return letterPanel;
+    }
+    private void updateMazePanel() throws IOException {
+        myMazePanel.removeAll();
+
+        for (int row = 0; row < 4; row++) {
+            for (int col = 0; col < 4; col++) {
+                char letter = letterGrid[row][col];
+                myMazePanel.add(createLetterPanel(letter, row, col));
+            }
+        }
+
+        myMazePanel.revalidate();
+        myMazePanel.repaint();
     }
     private JButton createArrowButton (String label){
         JButton arrowButton = new JButton(label);
@@ -101,13 +124,18 @@ public class MazePanel extends JPanel {
 
                     System.out.println(myMaze.getMyCurrentRoom().getLetter());
                 }
+                try {
+                    updateMazePanel();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         });
         arrowButton.setBorder(new EmptyBorder(0, 0, 0, 0));
         arrowButton.setFont(new Font("Arial", Font.BOLD, 20));
         return arrowButton;
     }
-    private void setUpMazePanel ( char start){
+    private void setUpMazePanel ( char start) throws IOException {
         for (int row = 0; row < 4; row++) {
             for (int col = 0; col < 4; col++) {
                 char letter = letterGrid[row][col];
@@ -115,12 +143,7 @@ public class MazePanel extends JPanel {
             }
         }
     }
-    public void highlightCurrentRoom () throws IOException {
-        BufferedImage myPicture = ImageIO.read(new File("/Users/zakariyeluqman/Downloads/Q-mark.jpg"));
-        JLabel picLabel = new JLabel(new ImageIcon(myPicture));
-        picLabel.setSize(22, 22);
-        myMazePanel.add(picLabel);
-    }
+
     public JPanel getMyMazePanel () {
         return myMazePanel;
     }
