@@ -10,6 +10,7 @@ import Model.Maze;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.io.File;
 
 /**
  * This class provides Menu for Trivia Maze game and Help,
@@ -123,6 +124,7 @@ public class ToolBar {
 
     private void addSaveGameListener(JMenuItem theSave) {
         theSave.addActionListener(theEvent -> {
+
             String fileName = JOptionPane.showInputDialog("Enter a name for your saved game:");
             if (fileName != null) {
                 String filePath = fileName + ".ser";
@@ -136,6 +138,9 @@ public class ToolBar {
                         "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
+            // Save game sound
+            SystemSound SaveGameSound = new SystemSound(new File("Save-Game.wav"));
+            SaveGameSound.gameSounds();
         });
     }
 
@@ -153,6 +158,9 @@ public class ToolBar {
                         JOptionPane.ERROR_MESSAGE);
                 }
             }
+            // Save game sound
+            SystemSound loadGameSound = new SystemSound(new File("load-game.wav"));
+            loadGameSound.gameSounds();
         });
     }
 
@@ -164,6 +172,9 @@ public class ToolBar {
         theStart.addActionListener(theEvent -> {
             Maze myMaze = new Maze();
             myMaze.startGame();
+            // Add game opening sound
+            SystemSound sound = new SystemSound(new File("Game-Opener.wav"));
+            sound.gameSounds();
         });
     }
 
@@ -174,6 +185,10 @@ public class ToolBar {
      */
     private void addExitListener(final JMenuItem theExit) {
         theExit.addActionListener(theEvent -> {
+            // press exit the game over sound
+            SystemSound sound = new SystemSound(new File("game-over-471.wav"));
+            sound.gameSounds();
+            // Exit from the game
             System.exit(0);
         });
     }
@@ -207,7 +222,7 @@ public class ToolBar {
                     " played by a single player.\n" +
                     " A player will select question type" +
                     " and then answer the question.\n" +
-                    " If answer to the question right then the player will move on" +
+                    " If answer to the question is right then the player will move on" +
                     " and a door will open.\n" +
                     " otherwise the door will close and" +
                     " after couple wrong answers the" +
