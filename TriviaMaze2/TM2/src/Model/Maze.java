@@ -81,6 +81,10 @@ public class Maze implements Serializable {
         return 0;
     }
 
+    public boolean isGameOn() {
+        return myIsGameStarted;
+    }
+
     public Room getMyCurrentRoom() {
         return myCurrentRoom;
     }
