@@ -9,6 +9,7 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -38,7 +39,7 @@ public class MazePanel extends JPanel {
         GridLayout myGD = new GridLayout(4, 4);
         myMazePanel.setLayout(myGD);
         setUpMazePanel('A');
-        myMazePanel.setPreferredSize(new Dimension(350, 350));
+        myMazePanel.setPreferredSize(new Dimension(250, 250));
         //myMazePanel.setBackground(Color.ORANGE);
         //highlightCurrentRoom();
     }

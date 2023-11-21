@@ -39,16 +39,16 @@ public class ToolBar {
     private JMenu myMazeMenu;
     /** Holds the Help menu. */
     private JMenu myHelpMenu;
-
+    private StatsPanel myStatsPanel;
     /**
      * Constructs the class and initializes the fields.
      */
-    public ToolBar(){
+    public ToolBar(StatsPanel myStatsPanel){
         myToolBar = new JMenuBar();
         myToolBar.setBorder(BorderFactory.createLineBorder(Color.black));
         setMazeHelpMenu();
         setMnemonic();
-
+        this.myStatsPanel = myStatsPanel;
     }
 
     /**
@@ -141,6 +141,7 @@ public class ToolBar {
             // Save game sound
             SystemSound SaveGameSound = new SystemSound(new File("Save-Game.wav"));
             SaveGameSound.gameSounds();
+            myStatsPanel.getDisTimer().stop();
         });
     }
 
@@ -168,10 +169,12 @@ public class ToolBar {
      * Sets action listener to start game.
      * @param theStart is the start menu item.
      */
-    private void addStartGameListener(JMenuItem theStart) {
+    public void addStartGameListener(JMenuItem theStart) {
         theStart.addActionListener(theEvent -> {
             Maze myMaze = new Maze();
+
             myMaze.startGame();
+            myStatsPanel.getDisTimer().start();
             // Add game opening sound
             SystemSound sound = new SystemSound(new File("Game-Opener.wav"));
             sound.gameSounds();
@@ -190,6 +193,7 @@ public class ToolBar {
             sound.gameSounds();
             // Exit from the game
             System.exit(0);
+            myStatsPanel.getDisTimer().stop();
         });
     }
 
