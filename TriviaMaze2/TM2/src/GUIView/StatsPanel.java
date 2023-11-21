@@ -13,30 +13,14 @@ public class StatsPanel extends JPanel {
     private JButton myStartButton;
     private JPanel myStatsPanel;
     private Maze myCurrentMaze;
-
     private JLabel myRoomLabel;
+    private JLabel myTimerLabel = new JLabel("00:00"); // Timer label initialization
 
-    private JLabel myTimerLabel = new JLabel("00:00");
-    ;
-
-    /**
-     * Sets the delay.
-     */
     private final int myDelay = 1000;
-    /**
-     * Sets the elapsed time to zero.
-     */
     private int myElapsedTime;
-    /**
-     * Sets the minutes to zero.
-     */
     private int myMinutes;
-    /**
-     * Sets the seconds to zero.
-     */
     private int mySeconds;
 
-    //private final Timer myTimer;
     private final Timer myDisTimer = new Timer(myDelay, new ActionListener() {
         @Override
         public void actionPerformed(final ActionEvent theE) {
@@ -50,59 +34,59 @@ public class StatsPanel extends JPanel {
             final String minsstring = String.format(numberFormat, myMinutes);
             final String secondsstring = String.format(numberFormat, mySeconds);
             myTimerLabel.setText(minsstring + ":" + secondsstring);
-
         }
     });
-    private Maze maze;
+
+    private JLabel playerNameLabel = createStyledLabel("Player: ");
+    private JLabel scoreLabel = createStyledLabel("Mistakes: ");
+    private JLabel gameStatusLabel = createStyledLabel("Game Status: ");
+    private JLabel customMessageLabel = createStyledLabel("Hope you enjoy the game!");
 
     public StatsPanel(final Maze theMaze) {
-
-
-        myStartButton = new JButton();
-
         myCurrentMaze = theMaze;
         myStatsPanel = new JPanel();
-        myStatsPanel.setPreferredSize(new Dimension(350, 350));
-        myStatsPanel.setBackground(Color.ORANGE);
+        myStatsPanel.setLayout(new BoxLayout(myStatsPanel, BoxLayout.Y_AXIS)); // Stacked vertically
+        myStatsPanel.setPreferredSize(new Dimension(240, 100)); // Adjusted height
+        myStatsPanel.setBackground(new Color(64, 79, 107)); // Dark Blue
 
+        myTimerLabel.setFont(new Font("SansSerif", Font.PLAIN, 20));
+        myTimerLabel.setForeground(Color.WHITE);
 
+        // Add user information labels to the panel
+        playerNameLabel.setFont(new Font("SansSerif", Font.BOLD, 14));
+        scoreLabel.setFont(new Font("SansSerif", Font.BOLD, 14));
+        gameStatusLabel.setFont(new Font("SansSerif", Font.BOLD, 14));
+        customMessageLabel.setFont(new Font("SansSerif", Font.PLAIN, 14));
 
-        myTimerLabel.setFont(new Font("SansSerif", Font.PLAIN, 16));
+        myStatsPanel.add(myTimerLabel); // Add myTimerLabel to the panel
+        myStatsPanel.add(playerNameLabel);
+        myStatsPanel.add(scoreLabel);
+        myStatsPanel.add(gameStatusLabel);
+        myStatsPanel.add(customMessageLabel);
 
-        setLayout(new FlowLayout(FlowLayout.CENTER));
-        myStatsPanel.add(myTimerLabel);
+        // Start the timer if the game is on
+        if (myCurrentMaze.isGameOn()) {
+            myDisTimer.start();
+        }
+    }
 
-        // Initialize and start the Swing Timer
-
-
-        myStartButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                myDisTimer.start();
-            }
-        });
-
-        myStatsPanel.add(myStartButton);
-
-        myRoomLabel = new JLabel();
-        myRoomLabel.setSize(350,350);
-        myRoomLabel.setText(Character.toString('A'));
-        myStatsPanel.add(myRoomLabel);
+    private JLabel createStyledLabel(String text) {
+        JLabel label = new JLabel(text);
+        label.setForeground(Color.WHITE);
+        label.setAlignmentX(Component.CENTER_ALIGNMENT);
+        return label;
     }
 
     public void changeRoomLetter(final Room theRoom) {
         myRoomLabel.setText(Character.toString(theRoom.getLetter()));
     }
 
-
-
-
     public JPanel getMyStatsPanelPanel() {
         return myStatsPanel;
     }
 
     private void updateTimerLabel() {
-        long totalTimeMillis = myCurrentMaze.getTotalTime() * 60 * 1000; // Convert total minutes to milliseconds
+        long totalTimeMillis = myCurrentMaze.getTotalTime() * 60 * 1000;
         long minutes = (totalTimeMillis / 1000) / 60;
         long seconds = (totalTimeMillis / 1000) % 60;
 
@@ -114,5 +98,7 @@ public class StatsPanel extends JPanel {
         return myTimerLabel;
     }
 
-
+    public Timer getDisTimer() {
+        return myDisTimer;
+    }
 }

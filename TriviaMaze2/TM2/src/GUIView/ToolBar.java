@@ -39,16 +39,16 @@ public class ToolBar {
     private JMenu myMazeMenu;
     /** Holds the Help menu. */
     private JMenu myHelpMenu;
-
+    private StatsPanel myStatsPanel;
     /**
      * Constructs the class and initializes the fields.
      */
-    public ToolBar(){
+    public ToolBar(StatsPanel myStatsPanel){
         myToolBar = new JMenuBar();
         myToolBar.setBorder(BorderFactory.createLineBorder(Color.black));
         setMazeHelpMenu();
         setMnemonic();
-
+        this.myStatsPanel = myStatsPanel;
     }
 
     /**
@@ -122,28 +122,6 @@ public class ToolBar {
      * @param theSave is the load menu item.
      */
 
-    private void addSaveGameListener(JMenuItem theSave) {
-        theSave.addActionListener(theEvent -> {
-
-            String fileName = JOptionPane.showInputDialog("Enter a name for your saved game:");
-            if (fileName != null) {
-                String filePath = fileName + ".ser";
-                try {
-                    Maze myMaze = new Maze();
-                    myMaze.saveGame(filePath);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    JOptionPane.showMessageDialog(null,
-                        "Error saving the game: " + e.getMessage(),
-                        "Error", JOptionPane.ERROR_MESSAGE);
-                }
-            }
-            // Save game sound
-            SystemSound SaveGameSound = new SystemSound(new File("Save-Game.wav"));
-            SaveGameSound.gameSounds();
-        });
-    }
-
     private void addLoadGameListener(JMenuItem theLoad) {
         theLoad.addActionListener(theEvent -> {
             String fileName = JOptionPane.showInputDialog("Enter saved game to reload:");
@@ -151,6 +129,12 @@ public class ToolBar {
                 try {
                     Maze myMaze = new Maze();
                     myMaze = Maze.loadGame(fileName);
+
+                    // Enable or disable buttons based on your conditions
+                    myStart.setEnabled(false);
+                    mySave.setEnabled(true);
+                    myLoad.setEnabled(false);
+                    myExit.setEnabled(true);
                 } catch (Exception e) {
                     e.printStackTrace();
                     JOptionPane.showMessageDialog(null,
@@ -164,20 +148,53 @@ public class ToolBar {
         });
     }
 
-    /**
-     * Sets action listener to start game.
-     * @param theStart is the start menu item.
-     */
-    private void addStartGameListener(JMenuItem theStart) {
-        theStart.addActionListener(theEvent -> {
-            Maze myMaze = new Maze();
-            myMaze.startGame();
-            // Add game opening sound
-            SystemSound sound = new SystemSound(new File("Game-Opener.wav"));
-            sound.gameSounds();
+    private void addSaveGameListener(JMenuItem theSave) {
+        theSave.addActionListener(theEvent -> {
+            String fileName = JOptionPane.showInputDialog("Enter a name for your saved game:");
+            if (fileName != null) {
+                String filePath = fileName + ".ser";
+                try {
+                    Maze myMaze = new Maze();
+                    myMaze.saveGame(filePath);
+
+                    // Enable or disable buttons based on your conditions
+                    myStart.setEnabled(true);
+                    mySave.setEnabled(false);
+                    myLoad.setEnabled(true);
+                    myExit.setEnabled(true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    JOptionPane.showMessageDialog(null,
+                        "Error saving the game: " + e.getMessage(),
+                        "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+            // Save game sound
+            SystemSound SaveGameSound = new SystemSound(new File("Save-Game.wav"));
+            SaveGameSound.gameSounds();
+            myStatsPanel.getDisTimer().stop();
         });
     }
 
+    public void addStartGameListener(JMenuItem theStart) {
+        theStart.addActionListener(theEvent -> {
+            Maze myMaze = new Maze();
+
+            myMaze.startGame();
+            myStatsPanel.getDisTimer().start();
+            // Add game opening sound
+            SystemSound sound = new SystemSound(new File("Game-Opener.wav"));
+            sound.gameSounds();
+
+            // Disable the Start Game button after it's clicked
+            theStart.setEnabled(false);
+
+            // You can enable other buttons here based on your conditions
+            mySave.setEnabled(true);
+            myLoad.setEnabled(false);
+            myExit.setEnabled(true);
+        });
+    }
 
     /**
      * Exit from Game.
@@ -190,6 +207,7 @@ public class ToolBar {
             sound.gameSounds();
             // Exit from the game
             System.exit(0);
+            myStatsPanel.getDisTimer().stop();
         });
     }
 
