@@ -1,3 +1,5 @@
+package Model;
+
 import org.sqlite.SQLiteDataSource;
 
 import java.sql.Connection;
