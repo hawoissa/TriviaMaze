@@ -9,6 +9,7 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -42,6 +43,7 @@ public class MazePanel extends JPanel {
         myMazePanel.setPreferredSize(new Dimension(250, 250));
         //myMazePanel.setBackground(Color.ORANGE);
         //highlightCurrentRoom();
+        setMyShortCuts();
     }
     private JPanel createLetterPanel ( char letter, int row, int col) throws IOException {
         JPanel letterPanel = new JPanel();
@@ -85,7 +87,7 @@ public class MazePanel extends JPanel {
         letterPanel.add(contentPanel, BorderLayout.CENTER);
         return letterPanel;
     }
-    private void updateMazePanel() throws IOException {
+    public void updateMazePanel() throws IOException {
         myMazePanel.removeAll();
 
         for (int row = 0; row < 4; row++) {
@@ -142,6 +144,65 @@ public class MazePanel extends JPanel {
                 char letter = letterGrid[row][col];
                 myMazePanel.add(createLetterPanel(letter, row, col));
             }
+        }
+    }
+
+    private void setMyShortCuts() {
+        myMazePanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+            .put(KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0), "moveUp");
+        myMazePanel.getActionMap().put("moveUp", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                handleArrowKey("↑");
+            }
+        });
+
+        myMazePanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+            .put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0), "moveDown");
+        myMazePanel.getActionMap().put("moveDown", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                handleArrowKey("↓");
+            }
+        });
+
+        myMazePanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+            .put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0), "moveLeft");
+        myMazePanel.getActionMap().put("moveLeft", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                handleArrowKey("←");
+            }
+        });
+
+        myMazePanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+            .put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0), "moveRight");
+        myMazePanel.getActionMap().put("moveRight", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                handleArrowKey("→");
+            }
+        });
+    }
+
+    private void handleArrowKey(String label) {
+        if (label.equals("↑")) {
+            myMaze.moveUp();
+            myCurrentQAPanel.changeRoomLetter(myMaze.getMyCurrentRoom());
+        } else if (label.equals("↓")) {
+            myMaze.moveDown();
+            myCurrentQAPanel.changeRoomLetter(myMaze.getMyCurrentRoom());
+        } else if (label.equals("←")) {
+            myMaze.moveLeft();
+            myCurrentQAPanel.changeRoomLetter(myMaze.getMyCurrentRoom());
+        } else if (label.equals("→")) {
+            myMaze.moveRight();
+            myCurrentQAPanel.changeRoomLetter(myMaze.getMyCurrentRoom());
+        }
+        try {
+            updateMazePanel();
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
         }
     }
 

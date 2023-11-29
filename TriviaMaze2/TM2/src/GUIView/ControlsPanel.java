@@ -3,6 +3,8 @@ package GUIView;
 import Model.Maze;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -19,26 +21,22 @@ public class ControlsPanel extends JPanel {
     public ControlsPanel(Maze maze, MazePanel mazePanel) {
         myMaze = maze;
         myMazePanel = mazePanel;
-        myControlPanel = new JPanel(new BorderLayout());
+        myControlPanel = new JPanel(new GridLayout(3, 3));
         myControlPanel.setPreferredSize(new Dimension(350, 250));
         myControlPanel.setBackground(Color.ORANGE);
 
-        JTextArea controlsArea = new JTextArea();
-        controlsArea.setEditable(false);
-        controlsArea.setLineWrap(true);
-        controlsArea.setWrapStyleWord(true);
+        // Add empty labels for layout purposes
+        myControlPanel.add(new JLabel());
+        myControlPanel.add(createArrowButton("↑   Up Arrow"));
+        myControlPanel.add(new JLabel());
 
-        controlsArea.setText(
-            "Controls:\n\n"
-                + "\u2190 - Move Left\n"
-                + "\u2191 - Move Up\n"
-                + "\u2192 - Move Right\n"
-                + "\u2193 - Move Down");
+        myControlPanel.add(createArrowButton("←   Left Arrow"));
+        myControlPanel.add(new JLabel());
+        myControlPanel.add(createArrowButton("→   Right Arrow"));
 
-        controlsArea.setFont(new Font("SansSerif", Font.BOLD, 24));
-        controlsArea.setForeground(Color.DARK_GRAY);
-
-        myControlPanel.add(controlsArea, BorderLayout.CENTER);
+        myControlPanel.add(new JLabel());
+        myControlPanel.add(createArrowButton("↓   Down Arrow"));
+        myControlPanel.add(new JLabel());
     }
 
     @Override
@@ -55,8 +53,32 @@ public class ControlsPanel extends JPanel {
         return myControlPanel;
     }
 
+    private JButton createArrowButton(String label) {
+        JButton arrowButton = new JButton(label);
+        arrowButton.setPreferredSize(new Dimension(90, 90));
+        arrowButton.addActionListener(e -> handleMove(getDirectionForLabel(label)));
+        arrowButton.setBorder(new EmptyBorder(0, 0, 0, 0));
+        arrowButton.setFont(new Font("Arial", Font.BOLD, 20));
+        return arrowButton;
+    }
+
+    private Direction getDirectionForLabel(String label) {
+        switch (label) {
+            case "↑   Up Arrow":
+                return Direction.UP;
+            case "↓   Down Arrow":
+                return Direction.DOWN;
+            case "←   Left Arrow":
+                return Direction.LEFT;
+            case "→   Right Arrow":
+                return Direction.RIGHT;
+            default:
+                throw new IllegalArgumentException("Invalid label");
+        }
+    }
+
     // Method to handle move based on user input or trigger
-   /* public void handleMove(Direction direction) {
+    public void handleMove(Direction direction) {
         switch (direction) {
             case UP:
                 myMaze.moveUp();
@@ -84,9 +106,9 @@ public class ControlsPanel extends JPanel {
         DOWN,
         RIGHT,
         LEFT
-    }*/
+    }
 
     private void updateMazePanel() throws IOException {
-        //UPDATE MAZE PANEL
+        myMazePanel.updateMazePanel();
     }
 }
