@@ -39,7 +39,7 @@ public class Frame extends JFrame {
 
         buildFrame();
         setLayout(new BorderLayout());
-
+        setFocusTraversalPolicy(new LayoutFocusTraversalPolicy());
 //        this.add(myMazePanel.getMyMazePanel());
 //        this.add(myStatsPanel.getMyStatsPanelPanel());
 //        this.add(myControlPanel.getMyControlPanel());
