@@ -199,13 +199,16 @@ public class ToolBar {
 
     private void addAboutListener(final JMenuItem theAbout) {
         theAbout.addActionListener(theEvent -> {
+            String aTeam = "Team9.jpeg";
+            ImageIcon icon = new ImageIcon(aTeam);
             final StringBuilder build = new StringBuilder();
             build.append("Authors: Matiullah Jalal\n"
                 + "               Hawo Issa\n"
                 + "               Zakariye Luqman\n"
-                + "Code Version: 10/28/2023\n"
+                + "Code Version: 11/29/2023\n"
                 + "Java Version: \"13.0.8\" 2021-07-20\n\n");
-            JOptionPane.showMessageDialog(null, build);
+            JOptionPane.showMessageDialog(null, build, "Team 9",
+                    JOptionPane.INFORMATION_MESSAGE,icon);
         });
     }
 
@@ -214,6 +217,8 @@ public class ToolBar {
     }
 
     private void displayRules() {
+        String gameRules = "GRule.png";
+        ImageIcon icon = new ImageIcon(gameRules);
         final StringBuilder build = new StringBuilder();
         build.append("      ****** Trivia Maze Rules ******\n");
         build.append("Trivia Maze is a fun game, that can be" +
@@ -225,7 +230,8 @@ public class ToolBar {
             " Otherwise, the door will close, and" +
             " after a couple of wrong answers, the" +
             " game ends.");
-        JOptionPane.showMessageDialog(null, build.toString());
+        JOptionPane.showMessageDialog(null, build.toString(),null,
+                JOptionPane.INFORMATION_MESSAGE, icon);
     }
 
     private void addShortCutListener(final JMenuItem theShortCuts) {
@@ -236,12 +242,17 @@ public class ToolBar {
 
     private void displayShortcuts() {
         final StringBuilder build = new StringBuilder();
+        final String shortCut = "shortcut.png";
+        final ImageIcon icon = new ImageIcon(shortCut);
         build.append("|--Trivia Maze Shortcut Keys --| \n");
-        build.append("\tStart Game:\t\t CTRL + S\n" + "\tSave Game:\t\t CTRL + V\n");
-        build.append("\tLoad Game:\t\t CTRL + L\n" + "\tExit Game:\t\t  CTRL + E\n");
-        build.append("\tAbout:\t\t\t\t\t\t\t\t\t\tCTRL + A\n"
-            + "\tRules:\t\t\t\t\t\t\t\t\t\t\tCTRL + R\n");
-        build.append("\tShortcuts:\t\t\t\t\t\tCTRL + C\n");
-        JOptionPane.showMessageDialog(null, build.toString());
+        build.append(String.format("Start Game: %-8s CTR + S %s","","\n"));
+        build.append(String.format("Save Game: %-8s CTR + V %s","","\n"));
+        build.append(String.format("Load Game: %-8s CTR + L%s","","\n"));
+        build.append(String.format("Exit Game: %-8s  CTR + E %s","","\n"));
+        build.append(String.format("About: %-15s CTR + A %s","","\n"));
+        build.append(String.format("Rules: %-16s CTR + R %s","","\n"));
+        build.append(String.format("Shortcuts: %-10s CTR + C %s","","\n"));
+        JOptionPane.showMessageDialog(null, build.toString(),"Short Cut",
+                JOptionPane.INFORMATION_MESSAGE,icon);
     }
 }
