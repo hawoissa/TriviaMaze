@@ -7,6 +7,7 @@
 package Model;
 
 import java.io.*;
+import Model.QuestionAnswer1;
 
 public class Maze implements Serializable {
     private Room[][] myMaze;
@@ -39,6 +40,23 @@ public class Maze implements Serializable {
         myX = currentX;
         myY = currentY;
         myCurrentRoom = myMaze[myX][myY];
+    }
+
+    public QuestionAnswer1 getCurrentQuestion() {
+        return myCurrentRoom.getQuestionAnswer();
+    }
+
+    // Add this method to check the player's answer and update the game state
+    public boolean answerQuestion(String playerAnswer) {
+        QuestionAnswer1 currentQuestion = getCurrentQuestion();
+
+        if (myIsGameStarted && myCurrentRoom.isAnswerCorrect(playerAnswer)) {
+            return true;
+        } else {
+            myCurrentRoom.lockDoor();
+            resetGame();
+            return false;
+        }
     }
 
     public void startGame() {

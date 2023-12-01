@@ -11,7 +11,7 @@ public class Room implements Serializable {
     private int myY;
     private char myRoomLetter;
 
-    private QuestionAnswer myQA;
+    private QuestionAnswer1 myQA;
 
     /**
      * Constructor initializes the fields.
@@ -23,6 +23,20 @@ public class Room implements Serializable {
         myY = theY;
         myDoor = theDoor;
 
+    }
+
+    public QuestionAnswer1 getQuestionAnswer() {
+        return myQA;
+    }
+
+    // Add this method to check if the player answered the question correctly
+    public boolean isAnswerCorrect(String playerAnswer) {
+        return myQA.getMyAnswer().equalsIgnoreCase(playerAnswer);
+    }
+
+    // Add this method to lock the door if the answer is incorrect
+    public void lockDoor() {
+        myDoor.lock(true);
     }
 
     /**
@@ -46,13 +60,11 @@ public class Room implements Serializable {
         return myDoor;
     }
 
-
-
     public char getLetter() {
         return myRoomLetter;
     }
 
-    public QuestionAnswer.Question getQuestion() {
+    public String getQuestion() {
         return myQA.getMyQuestion();
     }
 }
