@@ -100,6 +100,15 @@ public class MazePanel extends JPanel {
         myMazePanel.revalidate();
         myMazePanel.repaint();
     }
+
+    private JButton createLockedButton() {
+        JButton lockedButton = new JButton("X");
+        lockedButton.setPreferredSize(new Dimension(20, 20));
+        lockedButton.setEnabled(false); // Disable the button
+        lockedButton.setBorder(new EmptyBorder(0, 0, 0, 0));
+        lockedButton.setFont(new Font("Arial", Font.BOLD, 20));
+        return lockedButton;
+    }
     private JButton createArrowButton (String label){
         JButton arrowButton = new JButton(label);
         arrowButton.setPreferredSize(new Dimension(20, 20));
