@@ -17,16 +17,20 @@ public class Room implements Serializable {
      * Constructor initializes the fields.
      */
     public Room(final char letter, final int theX, final int theY,
-                final Door theDoor) {
+                final Door theDoor, final QuestionAnswer1 theQA) {
         myRoomLetter = letter;
         myX = theX;
         myY = theY;
         myDoor = theDoor;
-
+        myQA = theQA;
     }
 
     public QuestionAnswer1 getQuestionAnswer() {
         return myQA;
+    }
+
+    public String getCurrentQuestionType() {
+        return myQA.getMyType();
     }
 
     // Add this method to check if the player answered the question correctly

@@ -96,7 +96,7 @@ public class MazePanel extends JPanel {
                 myMazePanel.add(createLetterPanel(letter, row, col));
             }
         }
-
+        myCurrentQAPanel.updateContent();
         myMazePanel.revalidate();
         myMazePanel.repaint();
     }
