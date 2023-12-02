@@ -7,6 +7,9 @@
 package Model;
 
 import java.io.*;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 import Model.QuestionAnswer1;
 
 public class Maze implements Serializable {
@@ -17,6 +20,7 @@ public class Maze implements Serializable {
     private long myEndTime;
     private int myX;
     private int myY;
+    private ArrayList<QuestionAnswer1> questionList;
 
     public Maze() {
         myX = 0;
@@ -24,10 +28,15 @@ public class Maze implements Serializable {
 
         myMaze = new Room[4][4];
 
+        questionList = new ArrayList<>();
+        TriviaQADatabase triviaDatabase = new TriviaQADatabase();
+        triviaDatabase.getQAFromDataBase(questionList);
+
         char letter = 'A';
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
-                myMaze[i][j] = new Room(letter, i, j, new Door());
+                myMaze[i][j] = new Room(letter, i, j, new Door(),
+                    questionList.get(0));
                 letter++;
             }
         }

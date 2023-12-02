@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 /**
  * This class creates questions and answers database.
@@ -131,7 +132,7 @@ public class TriviaQADatabase {
     /**
      * Gets question, answer, type and ID from database.
      */
-    public void getQAFromDataBase(){
+    public void getQAFromDataBase(ArrayList<QuestionAnswer1> qa){
         // Now query the database table for all its contents
         String query = "SELECT * FROM questions;";
 
@@ -146,9 +147,9 @@ public class TriviaQADatabase {
                 String hint = rs.getString("HINT");
                 String type = rs.getString("TYPE");
                 // an object of QuestionAnswer1
-                QuestionAnswer1 qa = new QuestionAnswer1(id,type,question,answer);
+                QuestionAnswer1 newQA = new QuestionAnswer1(id,type,question,answer);
                 // add qa into the arraylist
-                qa.addToQuestionList(qa);
+                qa.add(newQA);
             }
 
         } catch (Exception e) {

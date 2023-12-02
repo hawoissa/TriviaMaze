@@ -50,6 +50,51 @@ public class QAPanel extends JPanel {
 
     public void changeRoomLetter(final Room theRoom) {
         myRoomLabel.setText(Character.toString(theRoom.getLetter()));
+        myQuestionLabel.setText("Question: " + myCurrentMaze.getCurrentQuestion());
+    }
+
+    public void setMyAnswerBox() {
+        String type = myCurrentMaze.getMyCurrentRoom().getCurrentQuestionType();
+        myAnswerBox.removeAll();
+        if (type.equalsIgnoreCase("M")) {
+            String[] options = {"A", "B", "C"};
+            for (String option : options) {
+                JButton optionButton = new JButton(option);
+                optionButton.addActionListener(e -> handleAnswerSelection(option));
+                myAnswerBox.add(optionButton);
+            }
+        } else if (type.equalsIgnoreCase("TF")) {
+            String[] options = {"True", "False"};
+            for (String option : options) {
+                JButton optionButton = new JButton(option);
+                optionButton.addActionListener(e -> handleAnswerSelection(option));
+                myAnswerBox.add(optionButton);
+            }
+        } else {
+            JTextField answerTextField = new JTextField();
+            myAnswerBox.add(answerTextField);
+        }
+        myAnswerBox.revalidate();
+        myAnswerBox.repaint();
+    }
+
+    private void handleAnswerSelection(String selectedAnswer) {
+        System.out.println("Selected answer: " + selectedAnswer);
+    }
+
+    public void updateContent() {
+        // Get the current room in the maze
+        Room currentRoom = myCurrentMaze.getMyCurrentRoom();
+
+        // Update the room letter label
+        changeRoomLetter(currentRoom);
+        String currentQuestion = myCurrentMaze.getMyCurrentRoom().getCurrentQuestionType();
+        updateQuestionLabel(currentQuestion);
+        setMyAnswerBox();
+    }
+
+    private void updateQuestionLabel(String currentQuestion) {
+        myQuestionLabel.setText("Question: " + currentQuestion);
     }
 
     public JPanel getQAPanel() {
