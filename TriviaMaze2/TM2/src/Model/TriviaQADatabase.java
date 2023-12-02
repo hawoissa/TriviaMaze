@@ -110,25 +110,6 @@ public class TriviaQADatabase {
         moreQuestions();
     }
 
-    private void moreQuestions() {
-        insertQuestion(ds,"What is the nickname of Washington State?",
-                "The Evergreen State", "null", "M");
-        insertQuestion(ds,"China is the largest country by population in the world.",
-                "T", "null", "TF");
-        insertQuestion(ds,"C.P.U stands for central processing unit.",
-                "T", "null", "TF");
-        insertQuestion(ds,"C.P.U stands for central processing unit.",
-                "T", "null", "TF");
-        insertQuestion(ds,"What is algorithm?",
-                "Step by Step Solution", "null", "M");
-        insertQuestion(ds,"Who invented electricity bulb?",
-                "Thomas Edison", "null", "M");
-        insertQuestion(ds,"Java is a high-level language.",
-                "T", "null", "TF");
-        insertQuestion(ds,"To use sqlite in java we need to import its library.",
-                "T", "null", "TF");
-    }
-
     /**
      * Gets question, answer, type and ID from database.
      */
@@ -156,6 +137,57 @@ public class TriviaQADatabase {
             e.printStackTrace();
             System.exit(0);
         }
+    }
+
+    private void moreQuestions() {
+        insertQuestion(ds,"What is the nickname of Washington State?",
+            "The Evergreen State", "null", "M");
+        insertQuestion(ds,"China is the largest country by population in the world.",
+            "T", "null", "TF");
+        insertQuestion(ds,"C.P.U stands for central processing unit.",
+            "T", "null", "TF");
+        insertQuestion(ds,"C.P.U stands for central processing unit.",
+            "T", "null", "TF");
+        insertQuestion(ds,"What is algorithm?",
+            "Step by Step Solution", "null", "M");
+        insertQuestion(ds,"Who invented electricity bulb?",
+            "Thomas Edison", "null", "M");
+        insertQuestion(ds,"Java is a high-level language.",
+            "T", "null", "TF");
+        insertQuestion(ds,"To use sqlite in java we need to import its library.",
+            "T", "null", "TF");
+        insertQuestion(ds, "What is the capital of Japan?",
+            "Tokyo", "null", "M");
+        insertQuestion(ds, "Who painted the Mona Lisa?",
+            "Leonardo da Vinci", "null", "M");
+        insertQuestion(ds, "The Great Wall of China is visible from space. (True/False)",
+            "False", "null", "TF");
+        insertQuestion(ds, "Which planet is known as the Red Planet?",
+            "Mars", "null", "M");
+        insertQuestion(ds, "Who wrote the play 'Hamlet'?",
+            "William Shakespeare", "null", "M");
+        insertQuestion(ds, "The currency of India is the Dollar. (True/False)",
+            "False", "null", "TF");
+        insertQuestion(ds, "What is the square root of 144?",
+            "12", "null", "M");
+        insertQuestion(ds, "Who developed the theory of relativity?",
+            "Albert Einstein", "null", "M");
+        insertQuestion(ds, "What is the largest mammal in the world?",
+            "Blue Whale", "null", "M");
+        insertQuestion(ds, "In which year did World War II end?",
+            "1945", "null", "M");
+        insertQuestion(ds, "The Eiffel Tower is located in which city?",
+            "Paris", "null", "M");
+        insertQuestion(ds, "Who wrote 'To Kill a Mockingbird'?",
+            "Harper Lee", "null", "M");
+        insertQuestion(ds, "The human heart has how many chambers?",
+            "Four", "null", "M");
+        insertQuestion(ds, "Mount Everest is the highest mountain in the world. (True/False)",
+            "True", "null", "TF");
+        insertQuestion(ds, "What is the largest ocean on Earth?",
+            "Pacific Ocean", "null", "M");
+        insertQuestion(ds, "Who is known as the 'Father of Computer Science'?",
+            "Alan Turing", "null", "M");
     }
 }
 
