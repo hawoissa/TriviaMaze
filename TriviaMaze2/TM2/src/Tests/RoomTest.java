@@ -1,6 +1,7 @@
-package Model;
+package Tests;
 
-import Model.QuestionAnswer;
+import Model.Door;
+import Model.QuestionAnswer1;
 import Model.Room;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,12 +12,11 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class RoomTest {
 
-
         private Door myDoor;
         private int myX;
         private int myY;
         private char myRoomLetter;
-        private QuestionAnswer myQA;
+        private QuestionAnswer1 myQA;
         private Room myRoom;
 
         /**
@@ -27,10 +27,14 @@ public class RoomTest {
             myX = 2;
             myY = 3;
             myRoomLetter = 'A';
-            myQA = new QuestionAnswer();
             myDoor = new Door();
-            myQA = new QuestionAnswer();
-            myRoom = new Room(myRoomLetter,myRoomLetter,myY,myDoor);
+            String question = "Thomas Addison invent the electricity? T/F";
+            String answer = "false";
+            String type = "TF";
+            int id = 1;
+
+            myQA = new QuestionAnswer1(id,type,question,answer);
+            myRoom = new Room(myRoomLetter,myRoomLetter,myY,myDoor,myQA );
         }
 
         /**
@@ -56,9 +60,35 @@ public class RoomTest {
         void testGetLetter(){
             assertEquals(myRoomLetter, myRoom.getLetter());
         }
-        // Need to  fix this tester
         @Test
         void testGetQuestion(){
+            String question = "Thomas Addison invent the electricity? T/F";
+            String answer = "false";
+            String type = "TF";
+            int id = 1;
+            QuestionAnswer1 qa = new QuestionAnswer1(id,type,question,answer);
+            assertEquals(qa.getMyQuestion(),myRoom.getQuestion());
+        }
+        @Test
+        void testGetCurrentQuestionType(){
+            assertEquals(myQA.getMyType(),myRoom.getCurrentQuestionType());
+        }
+        @Test
+        void testIsAnswerCorrect(){
+            String answer = "false";
+            boolean expectedAnswer = true;
+            assertEquals(expectedAnswer,myRoom.isAnswerCorrect(answer));
+        }
+        @Test
+        void testGetStringQuestion(){
+            assertEquals(myQA.getMyQuestion(),myRoom.getQuestion());
+        }
+        @Test
+        void testLockDoor(){
+            boolean expected = false;
+            Door door = new Door();
+            door.lock(expected);
+            assertNotEquals(door.isLocked(),myRoom.getMyDoor());
         }
 
 }
