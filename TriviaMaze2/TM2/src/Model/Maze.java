@@ -143,4 +143,78 @@ public class Maze implements Serializable {
             myCurrentRoom = myMaze[myX][myY];
         }
     }
+
+    public void isGameOver() {
+        char[][] solveMatrix = new char[4][4];
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                if (myMaze[i][j].getMyDoor().isLocked()) {
+                    solveMatrix[i][j] = 'x';
+                } else {
+                    solveMatrix[i][j] = '.';
+                }
+            }
+        }
+
+        boolean success =  move(solveMatrix, 0, 0);
+
+        if (success) {
+            System.out.println("Succcess!!!");
+
+        } else {
+            System.out.println("WOWOWOW!!!");
+
+        }
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                System.out.print(solveMatrix[i][j]);
+            }
+            System.out.println();
+        }
+
+
+    }
+
+    private static boolean move(char[][] maze, int row, int col) {
+        boolean success = false;
+
+        if (validMove(maze, row, col)) {
+            markVisited(maze, row, col);
+            if (atExit(maze, row, col))
+                return true;
+
+            success = move(maze, row+1, col);
+
+            if (!success)
+                success = move(maze, row, col+1);
+            if (!success)
+                success = move(maze, row-1, col);
+            if (!success)
+                success = move(maze, row, col-1);
+            if (!success)
+                markDeadEnd(maze, row, col);
+
+        }
+
+        return success;
+    }
+
+
+
+    private static void markDeadEnd(char[][] maze, int row, int col) {
+        maze[row][col] = 'd';
+    }
+
+    private static void markVisited(char[][] maze, int row, int col) {
+        maze[row][col] = 'v';
+    }
+
+    private static boolean atExit(char[][] maze, int row, int col) {
+        return row == maze.length - 1 && col == maze[row].length - 1;
+    }
+
+    private static boolean validMove(char[][] maze, int row, int col) {
+        return row >= 0 && row < maze.length && col >= 0
+                && col < maze[row].length && maze[row][col] == '.';
+    }
 }
