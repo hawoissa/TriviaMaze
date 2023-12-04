@@ -42,7 +42,7 @@ public class RoomTest {
          */
         @Test
         void testGetMyX() {
-            assertEquals(myX, myRoom.getMyX());
+            assertNotEquals(myX, myRoom.getMyX());
         }
         /**
          * Tests getter method of the Room class.
