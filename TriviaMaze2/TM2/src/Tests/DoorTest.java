@@ -1,18 +1,28 @@
-/*package Model;
+package Tests;
+
+import Model.Door;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class DoorTest {
 
-    @org.junit.jupiter.api.BeforeEach
     void setUp() {
+       // myDoor = new Door();
     }
 
-    @org.junit.jupiter.api.Test
-    void isLocked() {
+    @Test
+    void testLock() {
+        Door myDoor = new Door();
+        boolean myValid = true;
+       myDoor.lock(myValid);
     }
 
-    @org.junit.jupiter.api.Test
-    void lock() {
+    @Test
+    void testIsLock() {
+        Door myDoor = new Door();
+        boolean myValid = true;
+        myDoor.lock(myValid);
+        assertTrue(myDoor.isLocked());
     }
-}*/
+}
