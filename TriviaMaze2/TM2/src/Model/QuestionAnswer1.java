@@ -1,8 +1,9 @@
-package Model;/*
+/*
     Names: Matiullah Jalal, Zakirye Luqman, Hawo Issa
     Course: TCSS 360
     Quarter: Winter 2023
  */
+package Model;
 import java.util.ArrayList;
 
 /**
