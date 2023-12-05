@@ -32,9 +32,29 @@ public interface RoomInterface {
     public char getLetter();
 
     /**
-     * Gets a question which is associated with the room.
-     * @return returns the question.
+     * A getter to get a question.
+     * @return returns a question associated with room.
      */
-    public QuestionAnswer.Question getQuestion();
+    public String getQuestion();
+    /**
+     * A getter to get question and answer.
+     * @return returns question and answer associated with the room.
+     */
+    public QuestionAnswer1 getQuestionAnswer();
+    /**
+     * A getter to get the question type.
+     * @return returns the question type.
+     */
+    public String getCurrentQuestionType();
+    /**
+     * Checks if the player answered the question is correctly.
+     * @param playerAnswer is the answer of the player.
+     * @return returns ture if correct otherwise false.
+     */
+    public boolean isAnswerCorrect(String playerAnswer);
+    /**
+     *  Add this method to lock the door if the answer is incorrect.
+     */
+    public void lockDoor();
 
 }
