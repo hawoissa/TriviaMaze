@@ -9,7 +9,12 @@ import Model.Maze;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.io.File;
 
 /**
  * This class provides Menu for Trivia Maze game and Help,
@@ -38,35 +43,42 @@ public class ToolBar {
     private JMenu myMazeMenu;
     /** Holds the Help menu. */
     private JMenu myHelpMenu;
+    private StatsPanel myStatsPanel;
 
     /**
      * Constructs the class and initializes the fields.
      */
-    public ToolBar(){
+    public ToolBar(StatsPanel myStatsPanel) {
         myToolBar = new JMenuBar();
         myToolBar.setBorder(BorderFactory.createLineBorder(Color.black));
         setMazeHelpMenu();
-        setMnemonic();
-
+        addListeners();
+        this.myStatsPanel = myStatsPanel;
+        setMyShortCuts();
     }
 
-    /**
-     * Creates the Maze and Help menu and added to toolbar.
-     */
+    private void setMyShortCuts() {
+        myRules.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        myExit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        myStart.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
+        mySave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
+        myLoad.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
+        myAbout.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        myShortCuts.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
+    }
+
     private void setMazeHelpMenu() {
-        // Maze menu and its item
         myMazeMenu = new JMenu("Maze Game");
-        myStart = new JMenuItem("Start Game\t\tCTRL\t   +  S");
-        mySave = new JMenuItem("Save Game\t\tCTRL\t   +  V");
-        myLoad = new JMenuItem("Load Game\t\tCTRL\t   +  L");
-        myExit = new JMenuItem("Exit Game\t\t  CTRL\t   +  E");
+        myStart = new JMenuItem("Start Game\t\tCTRL + S");
+        mySave = new JMenuItem("Save Game\t\tCTRL + V");
+        myLoad = new JMenuItem("Load Game\t\tCTRL + L");
+        myExit = new JMenuItem("Exit Game\t\tCTRL + E");
 
         myMazeMenu.add(myStart);
         myMazeMenu.add(mySave);
         myMazeMenu.add(myLoad);
         myMazeMenu.add(myExit);
 
-        // Help menu and its items
         myHelpMenu = new JMenu("Help");
         myAbout = new JMenuItem("About              CTRL + A");
         myRules = new JMenuItem("Rules               CTRL + R");
@@ -75,37 +87,14 @@ public class ToolBar {
         myHelpMenu.add(myRules);
         myHelpMenu.add(myShortCuts);
 
-        // add all to toolbar
         myToolBar.add(myMazeMenu);
         myToolBar.add(myHelpMenu);
     }
 
-    /**
-     * A getter method for toolbar of the frame.
-     * @return returns the toolbar.
-     */
-    public JMenuBar getToolBar(){
+    public JMenuBar getToolBar() {
         return myToolBar;
     }
 
-    /**
-     * Sets shortcut keys, using setMnemonic and KeyEven.
-     */
-    private void setMnemonic() {
-        // Mnemonic keys for shortcuts
-        myStart.setMnemonic(KeyEvent.VK_S);
-        mySave.setMnemonic(KeyEvent.VK_V);
-        myLoad.setMnemonic(KeyEvent.VK_L);
-        myExit.setMnemonic(KeyEvent.VK_E);
-        myAbout.setMnemonic(KeyEvent.VK_A);
-        myRules.setMnemonic(KeyEvent.VK_R);
-        myShortCuts.setMnemonic(KeyEvent.VK_C);
-        addListeners();
-    }
-
-    /**
-     * This method has all the methods for action listeners.
-     */
     private void addListeners() {
         addShortCutListener(myShortCuts);
         addRulesListener(myRules);
@@ -116,10 +105,27 @@ public class ToolBar {
         addSaveGameListener(mySave);
     }
 
-    /**
-     * Sets action listener to Load game.
-     * @param theSave is the load menu item.
-     */
+    private void addLoadGameListener(JMenuItem theLoad) {
+        theLoad.addActionListener(theEvent -> {
+            String fileName = JOptionPane.showInputDialog("Enter saved game to reload:");
+            if (fileName != null) {
+                try {
+                    Maze myMaze = Maze.loadGame(fileName);
+                    myStart.setEnabled(false);
+                    mySave.setEnabled(true);
+                    myLoad.setEnabled(false);
+                    myExit.setEnabled(true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    JOptionPane.showMessageDialog(null,
+                        "Error loading the game: " + e.getMessage(), "Error",
+                        JOptionPane.ERROR_MESSAGE);
+                }
+            }
+            SystemSound loadGameSound = new SystemSound(new File("load-game.wav"));
+            loadGameSound.gameSounds();
+        });
+    }
 
     private void addSaveGameListener(JMenuItem theSave) {
         theSave.addActionListener(theEvent -> {
@@ -129,6 +135,10 @@ public class ToolBar {
                 try {
                     Maze myMaze = new Maze();
                     myMaze.saveGame(filePath);
+                    myStart.setEnabled(true);
+                    mySave.setEnabled(false);
+                    myLoad.setEnabled(true);
+                    myExit.setEnabled(true);
                 } catch (Exception e) {
                     e.printStackTrace();
                     JOptionPane.showMessageDialog(null,
@@ -136,100 +146,113 @@ public class ToolBar {
                         "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
+            SystemSound SaveGameSound = new SystemSound(new File("Save-Game.wav"));
+            SaveGameSound.gameSounds();
+            myStatsPanel.getDisTimer().stop();
         });
     }
 
-    private void addLoadGameListener(JMenuItem theLoad) {
-        theLoad.addActionListener(theEvent -> {
-            String fileName = JOptionPane.showInputDialog("Enter saved game to reload:");
-            if (fileName != null) {
-                try {
-                    Maze myMaze = new Maze();
-                    myMaze = Maze.loadGame(fileName);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    JOptionPane.showMessageDialog(null,
-                        "Error loading the game: " + e.getMessage(), "Error",
-                        JOptionPane.ERROR_MESSAGE);
+    public void addStartGameListener(JMenuItem theStart) {
+        theStart.addActionListener(theEvent -> {
+            Maze myMaze = new Maze();
+            myMaze.startGame();
+            myStatsPanel.getDisTimer().start();
+            SystemSound sound = new SystemSound(new File("Game-Opener.wav"));
+            sound.gameSounds();
+            theStart.setEnabled(false);
+            mySave.setEnabled(true);
+            myLoad.setEnabled(false);
+            myExit.setEnabled(true);
+        });
+    }
+
+    private void addExitListener(final JMenuItem theExit) {
+        theExit.addActionListener(theEvent -> {
+            SystemSound sound = new SystemSound(new File("game-over-471.wav"));
+            sound.gameSounds();
+            System.exit(0);
+            myStatsPanel.getDisTimer().stop();
+        });
+
+        theExit.addKeyListener(new KeyListener() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.isMetaDown() && e.getKeyCode() == KeyEvent.VK_E) {
+                    SystemSound sound = new SystemSound(new File("game-over-471.wav"));
+                    sound.gameSounds();
+                    System.exit(0);
+                    myStatsPanel.getDisTimer().stop();
                 }
+            }
+
+            @Override
+            public void keyTyped(KeyEvent e) {
+                // Not needed for this example
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                // Not needed for this example
             }
         });
     }
 
-    /**
-     * Sets action listener to start game.
-     * @param theStart is the start menu item.
-     */
-    private void addStartGameListener(JMenuItem theStart) {
-        theStart.addActionListener(theEvent -> {
-            Maze myMaze = new Maze();
-            myMaze.startGame();
-        });
-    }
-
-
-    /**
-     * Exit from Game.
-     * @param theExit exits program.
-     */
-    private void addExitListener(final JMenuItem theExit) {
-        theExit.addActionListener(theEvent -> {
-            System.exit(0);
-        });
-    }
-
-    /**
-     * Gives details about version of the program.
-     * @param theAbout  is the program version.
-     */
     private void addAboutListener(final JMenuItem theAbout) {
         theAbout.addActionListener(theEvent -> {
+            String aTeam = "Team9.jpeg";
+            ImageIcon icon = new ImageIcon(aTeam);
             final StringBuilder build = new StringBuilder();
             build.append("Authors: Matiullah Jalal\n"
-                    + "               Hawo Issa\n"
-                    + "               Zakariye Luqman\n"
-                    + "Code Version: 10/28/2023\n"
-                    + "Java Version: \"13.0.8\" 2021-07-20\n\n");
-            JOptionPane.showMessageDialog(null,  build);
+                + "               Hawo Issa\n"
+                + "               Zakariye Luqman\n"
+                + "Code Version: 11/29/2023\n"
+                + "Java Version: \"13.0.8\" 2021-07-20\n\n");
+            JOptionPane.showMessageDialog(null, build, "Team 9",
+                    JOptionPane.INFORMATION_MESSAGE,icon);
         });
     }
-
-    /**
-     * This method give details  about the game rules.
-     * @param theRules is the  Rules menu item.
-     */
 
     private void addRulesListener(final JMenuItem theRules) {
-        theRules.addActionListener(theEvent -> {
-            final StringBuilder build = new StringBuilder();
-            build.append("      ****** Trivia Maze Rules ******\n");
-            build.append("Trivia Maze is a fun game, that can be" +
-                    " played by a single player.\n" +
-                    " A player will select question type" +
-                    " and then answer the question.\n" +
-                    " If answer to the question right then the player will move on" +
-                    " and a door will open.\n" +
-                    " otherwise the door will close and" +
-                    " after couple wrong answers the" +
-                    " game ends.");
-            JOptionPane.showMessageDialog(null, build.toString());
+        theRules.addActionListener(e -> displayRules());
+    }
+
+    private void displayRules() {
+        String gameRules = "GRule.png";
+        ImageIcon icon = new ImageIcon(gameRules);
+        final StringBuilder build = new StringBuilder();
+        build.append("      ****** Trivia Maze Rules ******\n");
+        build.append("Trivia Maze is a fun game, that can be" +
+            " played by a single player.\n" +
+            " A player will select a question type" +
+            " and then answer the question.\n" +
+            " If the answer to the question is correct, then the player will move on" +
+            " and a door will open.\n" +
+            " Otherwise, the door will close, and" +
+            " after a couple of wrong answers, the" +
+            " game ends.");
+        JOptionPane.showMessageDialog(null, build.toString(),null,
+                JOptionPane.INFORMATION_MESSAGE, icon);
+    }
+
+    private void addShortCutListener(final JMenuItem theShortCuts) {
+        theShortCuts.addActionListener(theEvent -> {
+            displayShortcuts();
         });
     }
 
-    /**
-     * This method gives details of the shortcut keys used in Toolbar.
-     * @param theShortCuts is the shortcut keys.
-     */
-    private void addShortCutListener(final JMenuItem theShortCuts) {
-        theShortCuts.addActionListener(theEvent -> {
-            final StringBuilder build = new StringBuilder();
-            build.append("|--Trivia Maze Shortcut Keys --| \n");
-            build.append("\tStart Game:\t\t CTR\t+\tS\n" + "\tSave Game:\t\t CTR\t+V\n");
-            build.append("\tLoad Game:\t\t CTR\t+\tL\n" + "\tExit Game:\t\t  CTR\t+\tE\n");
-            build.append("\tAbout:\t\t\t\t\t\t\t\t\t\tCTR\t+\tA\n"
-                    + "\tRules:\t\t\t\t\t\t\t\t\t\t\tCTR\t+\tR\n");
-            build.append("\tShortcuts:\t\t\t\t\t\tCTR\t+\tC\n");
-            JOptionPane.showMessageDialog(null, build.toString());
-        });
+    private void displayShortcuts() {
+        final StringBuilder build = new StringBuilder();
+        final String shortCut = "shortcut.png";
+        final ImageIcon icon = new ImageIcon(shortCut);
+        build.append("|--Trivia Maze Shortcut Keys --| \n");
+        build.append(String.format("Start Game: %-8s CTR + S %s","","\n"));
+        build.append(String.format("Save Game: %-8s CTR + V %s","","\n"));
+        build.append(String.format("Load Game: %-8s CTR + L%s","","\n"));
+        build.append(String.format("Exit Game: %-8s  CTR + E %s","","\n"));
+        build.append(String.format("About: %-15s CTR + A %s","","\n"));
+        build.append(String.format("Rules: %-16s CTR + R %s","","\n"));
+        build.append(String.format("Shortcuts: %-10s CTR + C %s","","\n"));
+        JOptionPane.showMessageDialog(null, build.toString(),"Short Cut",
+                JOptionPane.INFORMATION_MESSAGE,icon);
     }
 }
