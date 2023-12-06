@@ -52,6 +52,9 @@ public class Room implements Serializable {
     public QuestionAnswer1 getQuestionAnswer() {
         return myQA;
     }
+    public void setQuestionAnswer(QuestionAnswer1 newQA) {
+        myQA = newQA;
+    }
     /**
      * A getter to get the question type.
      * @return returns the question type.
