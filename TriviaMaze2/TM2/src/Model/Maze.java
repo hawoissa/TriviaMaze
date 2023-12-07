@@ -31,7 +31,9 @@ public class Maze implements Serializable {
 
         // Create an instance of TriviaQADatabase and populate questionList
         TriviaQADatabase triviaDatabase = new TriviaQADatabase();
-        triviaDatabase.getQAFromDataBase(questionList);
+        triviaDatabase.initializeDatabase();
+        //triviaDatabase.getQAFromDataBase(questionList);
+        questionList=triviaDatabase.getData();
 
         char letter = 'A';
         for (int i = 0; i < 4; i++) {
@@ -86,13 +88,13 @@ public class Maze implements Serializable {
         myCurrentRoom = myMaze[myX][myY];
     }
 
-    public QuestionAnswer1 getCurrentQuestion() {
-        return myCurrentRoom.getQuestionAnswer();
+    public String getCurrentQuestion() {
+        return myCurrentRoom.getQuestionAnswer().getMyQuestion();
     }
 
     // Add this method to check the player's answer and update the game state
     public boolean answerQuestion(String playerAnswer) {
-        QuestionAnswer1 currentQuestion = getCurrentQuestion();
+        QuestionAnswer1 currentQuestion = myCurrentRoom.getQuestionAnswer();
 
         if (myIsGameStarted && currentQuestion != null && myCurrentRoom.isAnswerCorrect(playerAnswer)) {
             myCurrentRoom.getMyDoor().lock(false);
