@@ -6,10 +6,7 @@ package Model;/*
 
 import org.sqlite.SQLiteDataSource;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 
 /**
@@ -19,7 +16,7 @@ import java.util.ArrayList;
 public class TriviaQADatabase {
     /** Holds sqlite data source . */
     SQLiteDataSource ds = null;
-
+    ArrayList<QuestionAnswer1> data;
     /**
      * Constructor initializes the fields.
      */
@@ -29,11 +26,30 @@ public class TriviaQADatabase {
             ds.setUrl("jdbc:sqlite:question.db");
             // will create database table if not exits one
             createTable();
+            data=new ArrayList<>();
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(0);
         }
         System.out.println("Opened data base successfully");
+    }
+
+    public void initializeDatabase() {
+        try {
+            // Create the table if it doesn't exist
+            createTable();
+
+            // Insert rows into the database
+            insertRowsData();
+
+            // Retrieve data from the database and populate the ArrayList
+            getQAFromDataBase(data);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.exit(0);
+        }
+        System.out.println("Initialized database successfully");
     }
 
     public void closeDsConnection() throws SQLException {
@@ -76,18 +92,18 @@ public class TriviaQADatabase {
      */
     private void insertQuestion(final SQLiteDataSource theDs, final String theQuestion,
                                 final String theAnswer, final String theHint,
-                                final String theType, ArrayList<QuestionAnswer1> qa) {
-        String query = String.format("INSERT INTO questions (QUESTION, ANSWER, HINT, TYPE) VALUES ('%s','%s','%s','%s')",
-            theQuestion, theAnswer, theHint, theType);
-        try (Connection conn = ds.getConnection();
-             Statement stmt = conn.createStatement()) {
-            int rv = stmt.executeUpdate(query);
-            System.out.println("executeUpdate() returned " + rv);
+                                final String theType) {
+        String query = "INSERT INTO questions (QUESTION, ANSWER, HINT, TYPE) VALUES (?, ?, ?, ?)";
+        try (Connection conn = theDs.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setString(1, theQuestion);
+            pstmt.setString(2, theAnswer);
+            pstmt.setString(3, theHint);
+            pstmt.setString(4, theType);
 
-            // After inserting into the database, also add the question to the ArrayList
-            QuestionAnswer1 newQA = new QuestionAnswer1(0, theType, theQuestion, theAnswer);
-            qa.add(newQA);
-        } catch (Exception e) {
+            int rv = pstmt.executeUpdate();
+            System.out.println("executeUpdate() returned " + rv);
+        } catch (SQLException e) {
             e.printStackTrace();
             System.exit(0);
         }
@@ -96,15 +112,64 @@ public class TriviaQADatabase {
     /**
      * Insert rows of data using the insertQuestion method.
      */
-    public void insertRowsData(ArrayList<QuestionAnswer1> qa) {
+    public void insertRowsData() {
         System.out.println("Attempting to insert rows into questions table");
-        insertQuestion(ds, "What is the capital of France?", "Paris", "null", "M", qa);
-        insertQuestion(ds, "Who wrote (Romeo and Juliet)?", "William Shakespeare", "null", "TF", qa);
-        insertQuestion(ds, "The Earth is flat.?", "False", "Think about a scientific evidence", "TF", qa);
-        insertQuestion(ds, "How many other countries does U.S. share a land border with?", "Two", "null", "M", qa);
-        insertQuestion(ds, "Texas is the largest state by area?", "False", "null", "TF", qa);
-        insertQuestion(ds, "What do the stripes of the American flag represent?", "13 colonies", "null", "M", qa);
-        moreQuestions(qa);
+        insertQuestion(ds, "What is the capital of France?", "Paris", "null", "M");
+        insertQuestion(ds, "Who wrote (Romeo and Juliet)?", "William Shakespeare", "null", "TF");
+        insertQuestion(ds, "The Earth is flat.?", "False", "Think about scientific evidence", "TF");
+        insertQuestion(ds, "How many other countries does the U.S. share a land border with?", "Two", "null", "M");
+        insertQuestion(ds, "Texas is the largest state by area?", "False", "null", "TF");
+        insertQuestion(ds, "What do the stripes of the American flag represent?", "13 colonies", "null", "M");
+        moreQuestions();
+    }
+
+    private void moreQuestions() {
+        insertQuestion(ds, "What is the nickname of Washington State?",
+                "The Evergreen State", null, "M");
+        insertQuestion(ds, "China is the largest country by population in the world.",
+                "T", null, "TF");
+        insertQuestion(ds, "C.P.U stands for central processing unit.",
+                "T", null, "TF");
+        insertQuestion(ds, "What is an algorithm?",
+                "Step by Step Solution", null, "M");
+        insertQuestion(ds, "Who invented the electric bulb?",
+                "Thomas Edison", null, "M");
+        insertQuestion(ds, "Java is a high-level language.",
+                "T", null, "TF");
+        insertQuestion(ds, "To use SQLite in Java, do we need to import its library?",
+                "T", null, "TF");
+        insertQuestion(ds, "What is the capital of Japan?",
+                "Tokyo", null, "M");
+        insertQuestion(ds, "Who painted the Mona Lisa?",
+                "Leonardo da Vinci", null, "M");
+        insertQuestion(ds, "The Great Wall of China is visible from space. (True/False)",
+                "False", null, "TF");
+        insertQuestion(ds, "Which planet is known as the Red Planet?",
+                "Mars", null, "M");
+        insertQuestion(ds, "Who wrote the play 'Hamlet'?",
+                "William Shakespeare", null, "M");
+        insertQuestion(ds, "The currency of India is the Dollar. (True/False)",
+                "False", null, "TF");
+        insertQuestion(ds, "What is the square root of 144?",
+                "12", null, "M");
+        insertQuestion(ds, "Who developed the theory of relativity?",
+                "Albert Einstein", null, "M");
+        insertQuestion(ds, "What is the largest mammal in the world?",
+                "Blue Whale", null, "M");
+        insertQuestion(ds, "In which year did World War II end?",
+                "1945", null, "M");
+        insertQuestion(ds, "The Eiffel Tower is located in which city?",
+                "Paris", null, "M");
+        insertQuestion(ds, "Who wrote 'To Kill a Mockingbird'?",
+                "Harper Lee", null, "M");
+        insertQuestion(ds, "The human heart has how many chambers?",
+                "Four", null, "M");
+        insertQuestion(ds, "Mount Everest is the highest mountain in the world. (True/False)",
+                "True", null, "TF");
+        insertQuestion(ds, "What is the largest ocean on Earth?",
+                "Pacific Ocean", null, "M");
+        insertQuestion(ds, "Who is known as the 'Father of Computer Science'?",
+                "Alan Turing", null, "M");
     }
 
     /**
@@ -136,55 +201,8 @@ public class TriviaQADatabase {
         }
     }
 
-    private void moreQuestions(ArrayList<QuestionAnswer1> qa) {
-        insertQuestion(ds,"What is the nickname of Washington State?",
-            "The Evergreen State", "null", "M", qa);
-        insertQuestion(ds,"China is the largest country by population in the world.",
-            "T", "null", "TF", qa);
-        insertQuestion(ds,"C.P.U stands for central processing unit.",
-            "T", "null", "TF", qa);
-        insertQuestion(ds,"C.P.U stands for central processing unit.",
-            "T", "null", "TF", qa);
-        insertQuestion(ds,"What is algorithm?",
-            "Step by Step Solution", "null", "M", qa);
-        insertQuestion(ds,"Who invented electricity bulb?",
-            "Thomas Edison", "null", "M", qa);
-        insertQuestion(ds,"Java is a high-level language.",
-            "T", "null", "TF", qa);
-        insertQuestion(ds,"To use sqlite in java we need to import its library.",
-            "T", "null", "TF", qa);
-        insertQuestion(ds, "What is the capital of Japan?",
-            "Tokyo", "null", "M", qa);
-        insertQuestion(ds, "Who painted the Mona Lisa?",
-            "Leonardo da Vinci", "null", "M", qa);
-        insertQuestion(ds, "The Great Wall of China is visible from space. (True/False)",
-            "False", "null", "TF", qa);
-        insertQuestion(ds, "Which planet is known as the Red Planet?",
-            "Mars", "null", "M", qa);
-        insertQuestion(ds, "Who wrote the play 'Hamlet'?",
-            "William Shakespeare", "null", "M", qa);
-        insertQuestion(ds, "The currency of India is the Dollar. (True/False)",
-            "False", "null", "TF", qa);
-        insertQuestion(ds, "What is the square root of 144?",
-            "12", "null", "M", qa);
-        insertQuestion(ds, "Who developed the theory of relativity?",
-            "Albert Einstein", "null", "M", qa);
-        insertQuestion(ds, "What is the largest mammal in the world?",
-            "Blue Whale", "null", "M", qa);
-        insertQuestion(ds, "In which year did World War II end?",
-            "1945", "null", "M", qa);
-        insertQuestion(ds, "The Eiffel Tower is located in which city?",
-            "Paris", "null", "M", qa);
-        insertQuestion(ds, "Who wrote 'To Kill a Mockingbird'?",
-            "Harper Lee", "null", "M", qa);
-        insertQuestion(ds, "The human heart has how many chambers?",
-            "Four", "null", "M", qa);
-        insertQuestion(ds, "Mount Everest is the highest mountain in the world. (True/False)",
-            "True", "null", "TF", qa);
-        insertQuestion(ds, "What is the largest ocean on Earth?",
-            "Pacific Ocean", "null", "M", qa);
-        insertQuestion(ds, "Who is known as the 'Father of Computer Science'?",
-            "Alan Turing", "null", "M", qa);
+    public ArrayList<QuestionAnswer1> getData() {
+        return data;
     }
 }
 
