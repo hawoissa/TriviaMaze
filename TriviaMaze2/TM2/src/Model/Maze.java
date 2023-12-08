@@ -44,7 +44,7 @@ public class Maze implements Serializable {
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 // Assign a question to each room from questionList
-                myMaze[i][j] = new Room(letter, i, j, new Door(), getQuestionForRoom());
+                myMaze[i][j] = new Room(letter, i, j, Door.getInstance(), getQuestionForRoom());
                 letter++;
             }
         }
