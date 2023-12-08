@@ -23,6 +23,8 @@ public class QuestionAnswer1 {
     /** An arraylist question. */
     private final ArrayList<QuestionAnswer1> myQuestionArraylist;
 
+
+
     /**
      * Constructor initializes the fields.
      * @param theID is the other ID.
@@ -95,5 +97,7 @@ public class QuestionAnswer1 {
                 + "\nQuestion: " + myQuestion + "\nAnswer: "
                 + myAnswer + "\n ALL Array Contents: \n" + array;
     }
+
+
 
 }

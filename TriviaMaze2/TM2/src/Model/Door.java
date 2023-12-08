@@ -17,10 +17,13 @@ public class Door implements DoorInterface, Serializable {
     /** Holds the lock status.*/
     private boolean myIsLocked;
 
+    private static Door myDoor = new Door();
+
+
     /**
      * Constructor initializes the fields.
      */
-    public Door(){
+    private Door(){
         // initially the door is open
         myIsLocked = false;
     }
@@ -37,6 +40,10 @@ public class Door implements DoorInterface, Serializable {
      */
     public void lock(final boolean theLocked){
         myIsLocked = theLocked;
+    }
+
+    public static Door getInstance(){
+        return myDoor;
     }
 
 }
