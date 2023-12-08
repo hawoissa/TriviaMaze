@@ -27,7 +27,7 @@ public class RoomTest {
             myX = 2;
             myY = 3;
             myRoomLetter = 'A';
-            myDoor = new Door();
+            myDoor = Door.getInstance();
             String question = "Thomas Addison invent the electricity? T/F";
             String answer = "false";
             String type = "TF";
@@ -86,7 +86,7 @@ public class RoomTest {
         @Test
         void testLockDoor(){
             boolean expected = false;
-            Door door = new Door();
+            Door door = Door.getInstance();
             door.lock(expected);
             assertNotEquals(door.isLocked(),myRoom.getMyDoor());
         }
