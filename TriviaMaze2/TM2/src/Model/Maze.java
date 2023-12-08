@@ -33,7 +33,12 @@ public class Maze implements Serializable {
         TriviaQADatabase triviaDatabase = new TriviaQADatabase();
         triviaDatabase.initializeDatabase();
         //triviaDatabase.getQAFromDataBase(questionList);
-        questionList=triviaDatabase.getData();
+        int track = 0;
+        while (questionList.size() < 203) {
+            questionList.add(triviaDatabase.getData().get(track));
+            track++;
+        }
+
 
         char letter = 'A';
         for (int i = 0; i < 4; i++) {
