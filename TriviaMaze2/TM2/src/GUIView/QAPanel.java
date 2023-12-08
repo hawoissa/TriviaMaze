@@ -83,7 +83,7 @@ public class QAPanel extends JPanel {
 
         myRoomLabel.setText(Character.toString(currentRoom.getLetter()));
         String currentQuestionType = currentRoom.getCurrentQuestionType();
-        updateQuestionLabel(currentQuestionType);
+        updateQuestionLabel(currentRoom.getQuestion());
         setMyAnswerBox(currentQuestionType);
     }
 
