@@ -9,6 +9,7 @@ package Model;
 import java.io.*;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Random;
 
 import Model.QuestionAnswer1;
 
@@ -32,13 +33,7 @@ public class Maze implements Serializable {
         // Create an instance of TriviaQADatabase and populate questionList
         TriviaQADatabase triviaDatabase = new TriviaQADatabase();
         triviaDatabase.initializeDatabase();
-        //triviaDatabase.getQAFromDataBase(questionList);
-        int track = 0;
-        while (questionList.size() < 203) {
-            questionList.add(triviaDatabase.getData().get(track));
-            track++;
-        }
-
+        triviaDatabase.getQAFromDataBase(questionList);
 
         char letter = 'A';
         for (int i = 0; i < 4; i++) {
@@ -57,7 +52,9 @@ public class Maze implements Serializable {
         // You can implement your logic to get a question from questionList
         // For example, you can remove a question from the list and return it
         if (!questionList.isEmpty()) {
-            return questionList.remove(0);
+            Random random = new Random();
+            int r = random.nextInt(questionList.size());
+            return questionList.remove(r);
         } else {
             return null; // Handle the case when questionList is empty
         }
@@ -101,12 +98,11 @@ public class Maze implements Serializable {
     public boolean answerQuestion(String playerAnswer) {
         QuestionAnswer1 currentQuestion = myCurrentRoom.getQuestionAnswer();
 
-        if (myIsGameStarted && currentQuestion != null && myCurrentRoom.isAnswerCorrect(playerAnswer)) {
+        if (myCurrentRoom.isAnswerCorrect(playerAnswer)) {
             myCurrentRoom.getMyDoor().lock(false);
             return true;
         } else {
             myCurrentRoom.lockDoor();
-            resetGame();
             return false;
         }
     }
