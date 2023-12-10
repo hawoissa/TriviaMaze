@@ -183,7 +183,7 @@ public class Maze implements Serializable {
         }
     }
 
-    public void isGameOver() {
+    public Boolean isGameOver() {
         char[][] solveMatrix = new char[4][4];
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
@@ -211,6 +211,7 @@ public class Maze implements Serializable {
             System.out.println();
         }
 
+        return success;
 
     }
 
