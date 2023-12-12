@@ -52,6 +52,9 @@ public class Room implements Serializable {
     public QuestionAnswer1 getQuestionAnswer() {
         return myQA;
     }
+    public void setQuestionAnswer(QuestionAnswer1 newQA) {
+        myQA = newQA;
+    }
     /**
      * A getter to get the question type.
      * @return returns the question type.
@@ -65,6 +68,7 @@ public class Room implements Serializable {
      * @return returns ture if correct otherwise false.
      */
     public boolean isAnswerCorrect(String playerAnswer) {
+
         return myQA.getMyAnswer().equalsIgnoreCase(playerAnswer);
     }
     /**

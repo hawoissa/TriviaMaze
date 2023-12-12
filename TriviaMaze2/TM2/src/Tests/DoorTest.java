@@ -13,14 +13,14 @@ class DoorTest {
 
     @Test
     void testLock() {
-        Door myDoor = new Door();
+        Door myDoor = Door.getInstance();
         boolean myValid = true;
        myDoor.lock(myValid);
     }
 
     @Test
     void testIsLock() {
-        Door myDoor = new Door();
+        Door myDoor = Door.getInstance();
         boolean myValid = true;
         myDoor.lock(myValid);
         assertTrue(myDoor.isLocked());

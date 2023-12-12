@@ -9,6 +9,7 @@ package Model;
 import java.io.*;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Random;
 
 import Model.QuestionAnswer1;
 
@@ -27,21 +28,59 @@ public class Maze implements Serializable {
         myY = 0;
 
         myMaze = new Room[4][4];
-
         questionList = new ArrayList<>();
+
+        // Create an instance of TriviaQADatabase and populate questionList
         TriviaQADatabase triviaDatabase = new TriviaQADatabase();
+        triviaDatabase.initializeDatabase();
         triviaDatabase.getQAFromDataBase(questionList);
 
         char letter = 'A';
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
-                myMaze[i][j] = new Room(letter, i, j, new Door(),
-                    questionList.get(0));
+                // Assign a question to each room from questionList
+                myMaze[i][j] = new Room(letter, i, j, Door.getInstance(), getQuestionForRoom());
                 letter++;
             }
         }
 
         myCurrentRoom = myMaze[0][0];
+    }
+
+    // Add this method to get a question from questionList for a room
+    private QuestionAnswer1 getQuestionForRoom() {
+        // You can implement your logic to get a question from questionList
+        // For example, you can remove a question from the list and return it
+        if (!questionList.isEmpty()) {
+            Random random = new Random();
+            int r = random.nextInt(questionList.size());
+            return questionList.remove(r);
+        } else {
+            return null; // Handle the case when questionList is empty
+        }
+    }
+
+    // Add methods for updating, deleting, and adding questions to rooms
+    public void updateQuestionForRoom(int x, int y, QuestionAnswer1 newQuestion) {
+        if (isValidCoordinate(x, y)) {
+            myMaze[x][y].setQuestionAnswer(newQuestion);
+        }
+    }
+
+    public void deleteQuestionForRoom(int x, int y) {
+        if (isValidCoordinate(x, y)) {
+            myMaze[x][y].setQuestionAnswer(null);
+        }
+    }
+
+    public void addQuestionToRoom(int x, int y, QuestionAnswer1 newQuestion) {
+        if (isValidCoordinate(x, y)) {
+            myMaze[x][y].setQuestionAnswer(newQuestion);
+        }
+    }
+
+    private boolean isValidCoordinate(int x, int y) {
+        return x >= 0 && x < myMaze.length && y >= 0 && y < myMaze[0].length;
     }
 
     public Maze(Room[][] maze, int currentX, int currentY) {
@@ -51,19 +90,19 @@ public class Maze implements Serializable {
         myCurrentRoom = myMaze[myX][myY];
     }
 
-    public QuestionAnswer1 getCurrentQuestion() {
-        return myCurrentRoom.getQuestionAnswer();
+    public String getCurrentQuestion() {
+        return myCurrentRoom.getQuestionAnswer().getMyQuestion();
     }
 
     // Add this method to check the player's answer and update the game state
     public boolean answerQuestion(String playerAnswer) {
-        QuestionAnswer1 currentQuestion = getCurrentQuestion();
+        QuestionAnswer1 currentQuestion = myCurrentRoom.getQuestionAnswer();
 
-        if (myIsGameStarted && myCurrentRoom.isAnswerCorrect(playerAnswer)) {
+        if (myCurrentRoom.isAnswerCorrect(playerAnswer)) {
+            myCurrentRoom.getMyDoor().lock(false);
             return true;
         } else {
             myCurrentRoom.lockDoor();
-            resetGame();
             return false;
         }
     }
@@ -144,7 +183,7 @@ public class Maze implements Serializable {
         }
     }
 
-    public void isGameOver() {
+    public Boolean isGameOver() {
         char[][] solveMatrix = new char[4][4];
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
@@ -172,6 +211,7 @@ public class Maze implements Serializable {
             System.out.println();
         }
 
+        return success;
 
     }
 
