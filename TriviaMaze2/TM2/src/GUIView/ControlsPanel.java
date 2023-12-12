@@ -22,8 +22,9 @@ public class ControlsPanel extends JPanel {
         myMaze = maze;
         myMazePanel = mazePanel;
         myControlPanel = new JPanel(new GridLayout(3, 3));
-        myControlPanel.setPreferredSize(new Dimension(350, 250));
-        myControlPanel.setBackground(Color.ORANGE);
+        myControlPanel.setPreferredSize(new Dimension(865, 150));  // previously 350 x 250
+//        myControlPanel.setBackground(Color.ORANGE);
+        myControlPanel.setBackground(new Color(240, 220, 30, 255));
 
         // Add empty labels for layout purposes
         myControlPanel.add(new JLabel());
