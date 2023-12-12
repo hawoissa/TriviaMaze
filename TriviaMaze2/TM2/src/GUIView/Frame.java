@@ -14,7 +14,7 @@ import java.io.IOException;
 public class Frame extends JFrame {
 
     // Constants for frame dimensions
-    private static final int MY_WEIGHT = 850;
+    private static final int MY_WEIGHT = 900;
     private static final int MY_HEIGHT = 850;
 
     // Frame components
@@ -39,24 +39,26 @@ public class Frame extends JFrame {
 
         buildFrame();
         setLayout(new BorderLayout());
-        setFocusTraversalPolicy(new LayoutFocusTraversalPolicy());
+        setLayout(new FlowLayout(FlowLayout.CENTER,5,15));
+        //setFocusTraversalPolicy(new LayoutFocusTraversalPolicy());
 //        this.add(myMazePanel.getMyMazePanel());
 //        this.add(myStatsPanel.getMyStatsPanelPanel());
 //        this.add(myControlPanel.getMyControlPanel());
 //        this.add(myFrameQAPanel.getQAPanel());
-
+        addToolBar();
+        add(myFrameQAPanel.getQAPanel(), BorderLayout.WEST);
         add(myMazePanel.getMyMazePanel(), BorderLayout.CENTER);
         add(myStatsPanel.getMyStatsPanelPanel(), BorderLayout.EAST);
         add(myControlPanel.getMyControlPanel(), BorderLayout.SOUTH);
-        add(myFrameQAPanel.getQAPanel(), BorderLayout.WEST);
-        addToolBar();
+
+
     }
 
     /**
      * Adds toolbar and its items to the Frame.
      */
     private void addToolBar() {
-        this.add(myToolBar.getToolBar(), BorderLayout.NORTH); // Specify BorderLayout.NORTH
+        this.add(myToolBar.getToolBar(), myToolBar.setToolBarDimension()); // Specify BorderLayout.NORTH
     }
 
     /**
@@ -74,8 +76,8 @@ public class Frame extends JFrame {
      * Private method to set the color of the frame.
      */
     private void setColorOfFrame() {
-        Color color1 = new Color(51, 0, 111, 244);
-        Color color2 = new Color(255, 215, 0, 168);
+        Color color1 = new Color(0, 128, 128, 153);
+        Color color2 = new Color(0, 0, 255, 192);
         // This creates a gradient paint color
         GradientPaint gradient = new GradientPaint(0, 0, color1, MY_WEIGHT, MY_HEIGHT, color2);
         // Setting contents of the pane using JPanel

@@ -46,7 +46,7 @@ public class StatsPanel extends JPanel {
         myCurrentMaze = theMaze;
         myStatsPanel = new JPanel();
         myStatsPanel.setLayout(new BoxLayout(myStatsPanel, BoxLayout.Y_AXIS)); // Stacked vertically
-        myStatsPanel.setPreferredSize(new Dimension(240, 100)); // Adjusted height
+        myStatsPanel.setPreferredSize(new Dimension(205, 550)); // Adjusted height (240, 100)
         myStatsPanel.setBackground(new Color(64, 79, 107)); // Dark Blue
 
         myTimerLabel.setFont(new Font("SansSerif", Font.PLAIN, 20));

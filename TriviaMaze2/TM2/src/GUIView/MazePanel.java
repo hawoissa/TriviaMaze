@@ -40,8 +40,9 @@ public class MazePanel extends JPanel {
         GridLayout myGD = new GridLayout(4, 4);
         myMazePanel.setLayout(myGD);
         setUpMazePanel('A');
-        myMazePanel.setPreferredSize(new Dimension(250, 250));
+        myMazePanel.setPreferredSize(new Dimension(400, 550));  // previously (250, 250)
         //myMazePanel.setBackground(Color.ORANGE);
+        myMazePanel.setBackground(Color.RED);
         //highlightCurrentRoom();
         setMyShortCuts();
     }

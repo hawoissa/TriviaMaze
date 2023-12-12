@@ -90,7 +90,10 @@ public class ToolBar {
         myToolBar.add(myMazeMenu);
         myToolBar.add(myHelpMenu);
     }
-
+    public Component setToolBarDimension(){
+        myToolBar.setPreferredSize(new Dimension(865,30));
+        return myToolBar;
+    }
     public JMenuBar getToolBar() {
         return myToolBar;
     }
