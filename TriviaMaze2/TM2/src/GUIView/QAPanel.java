@@ -19,8 +19,8 @@ public class QAPanel extends JPanel {
     public QAPanel(final Maze theMaze) {
         myCurrentMaze = theMaze;
         myQAPanel = new JPanel();
-        myQAPanel.setPreferredSize(new Dimension(150, 150));
-        myQAPanel.setBackground(new Color(255, 221, 153)); // Light Orange
+        myQAPanel.setPreferredSize(new Dimension(250, 550)); // previously 250 by 250
+        myQAPanel.setBackground(new Color(240, 220, 30)); // Light Orange
 
         myRoomLabel = new JLabel();
         myRoomLabel.setText(Character.toString('A'));
@@ -41,7 +41,8 @@ public class QAPanel extends JPanel {
 
         // Center Panel for Question and Answer
         JPanel centerPanel = new JPanel();
-        centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
+//        centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
+        centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.PAGE_AXIS));
         centerPanel.setBackground(new Color(255, 221, 153));
 
         //centerPanel.add(Box.createVerticalStrut(20)); // Add spacing

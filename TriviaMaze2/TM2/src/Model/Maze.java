@@ -63,9 +63,14 @@ public class Maze implements Serializable {
         questionList = new ArrayList<>();
 
         // Create an instance of TriviaQADatabase and populate questionList
-        TriviaQADatabase triviaDatabase = new TriviaQADatabase();
-        triviaDatabase.initializeDatabase();
-        triviaDatabase.getQAFromDataBase(questionList);
+//        TriviaQADatabase triviaDatabase = new TriviaQADatabase();
+//        triviaDatabase.initializeDatabase();
+//        triviaDatabase.getQAFromDataBase(questionList);
+
+        // Create an instance of QuestionFactory and populate questionList
+        QuestionFactory questionFactory = new QuestionFactory();
+        questionFactory.myDataBase.initializeDatabase();
+        questionFactory.myDataBase.getQAFromDataBase(questionList);
 
         char letter = 'A';
         for (int i = 0; i < 4; i++) {
