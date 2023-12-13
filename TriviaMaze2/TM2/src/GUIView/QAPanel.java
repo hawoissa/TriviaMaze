@@ -91,8 +91,14 @@ public class QAPanel extends JPanel {
             }
 
             if (isAnswerCorrect) {
+                if (myCurrentMaze.getMyCurrentRoom().getLetter() == 'P') {
+                    JOptionPane.showMessageDialog(this, "Game Won!!!");
+
+                }
                 // If the answer is correct, update the maze panel
                 updateContent();
+
+
             }
         } else {
             // Optionally, show a message to inform the user that the game is not on
@@ -102,6 +108,7 @@ public class QAPanel extends JPanel {
 
     // Modify the updateContent method to set the answer box based on the current question type
     public void updateContent() {
+
         currentRoom = myCurrentMaze.getMyCurrentRoom();
         myRoomLabel.setText(Character.toString(currentRoom.getLetter()));
         String currentQuestionType = currentRoom.getCurrentQuestionType();
