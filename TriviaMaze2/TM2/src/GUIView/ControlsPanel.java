@@ -80,25 +80,27 @@ public class ControlsPanel extends JPanel {
 
     // Method to handle move based on user input or trigger
     public void handleMove(Direction direction) {
-        switch (direction) {
-            case UP:
-                myMaze.moveUp();
-                break;
-            case DOWN:
-                myMaze.moveDown();
-                break;
-            case RIGHT:
-                myMaze.moveRight();
-                break;
-            case LEFT:
-                myMaze.moveLeft();
-                break;
-        }
-        // Optionally update UI or perform other actions after the move
-        try {
-            updateMazePanel();
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
+        if (myMaze.isGameOn()) {
+            switch (direction) {
+                case UP:
+                    myMaze.moveUp();
+                    break;
+                case DOWN:
+                    myMaze.moveDown();
+                    break;
+                case RIGHT:
+                    myMaze.moveRight();
+                    break;
+                case LEFT:
+                    myMaze.moveLeft();
+                    break;
+            }
+            // Optionally update UI or perform other actions after the move
+            try {
+                updateMazePanel();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
         }
     }
 

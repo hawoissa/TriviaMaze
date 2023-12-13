@@ -15,7 +15,15 @@ public interface MazeInterface {
      * @return
      */
     public Room getMyCurrentRoom();
-
+    public String getCurrentQuestion();
+    public boolean answerQuestion(String playerAnswer);
+    public void startGame();
+    public void resetGame();
+    public Maze loadGame(String filePath);
+    public void saveGame(String filePath);
+    public long getTotalTime();
+    public boolean isGameOn();
+    public boolean isGameOver();
     /**
      * Moves the player up in maze.
      */

@@ -33,7 +33,7 @@ public class Frame extends JFrame {
         myMaze = new Maze();
         myFrameQAPanel = new QAPanel(myMaze); // Instantiate myFrameQAPanel first
         myStatsPanel = new StatsPanel(myMaze);
-        myToolBar = new ToolBar(myStatsPanel);
+        myToolBar = new ToolBar(myStatsPanel, myMaze);
         myMazePanel = new MazePanel(myMaze, myFrameQAPanel);
         myControlPanel = new ControlsPanel(myMaze, myMazePanel);
 
