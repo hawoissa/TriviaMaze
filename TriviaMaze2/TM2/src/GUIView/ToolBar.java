@@ -92,6 +92,9 @@ public class ToolBar {
 
         myToolBar.add(myMazeMenu);
         myToolBar.add(myHelpMenu);
+
+        mySave.setEnabled(false);
+        myExit.setEnabled(false);
     }
     public Component setToolBarDimension(){
         myToolBar.setPreferredSize(new Dimension(865,30));
