@@ -14,7 +14,7 @@ import java.io.Serializable;
  * Each room may have trivia questions.
  * Serializable will help to save and load an object.
  */
-public class Room implements Serializable {
+public class Room implements Serializable, RoomInterface {
     /** A special number used when saving and loading objects.*/
     @Serial
     private static final long serialVersionUID = -89283998989899829L;
