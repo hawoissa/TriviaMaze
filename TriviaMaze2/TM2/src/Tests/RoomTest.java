@@ -34,7 +34,7 @@ public class RoomTest {
             int id = 1;
 
             myQA = new QuestionAnswer1(id,type,question,answer);
-            myRoom = new Room(myRoomLetter,myRoomLetter,myY,myDoor,myQA );
+            myRoom = new Room(myRoomLetter,myRoomLetter,myY,myDoor,myQA, 4);
         }
 
         /**

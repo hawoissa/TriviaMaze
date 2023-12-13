@@ -28,7 +28,7 @@ public class Room implements Serializable, RoomInterface {
     private char myRoomLetter;
     /** Holds question and answer associated with a room.*/
     private QuestionAnswer1 myQA;
-
+    private int doors;
     /**
      * Constructor initializes the fields.
      * @param letter is the letter other letter associated with a room.
@@ -38,12 +38,13 @@ public class Room implements Serializable, RoomInterface {
      * @param theQA is the other question and answer associated with the room.
      */
     public Room(final char letter, final int theX, final int theY,
-                final Door theDoor, final QuestionAnswer1 theQA) {
+                final Door theDoor, final QuestionAnswer1 theQA, final int numDoors) {
         myRoomLetter = letter;
         myX = theX;
         myY = theY;
         myDoor = theDoor;
         myQA = theQA;
+        doors = numDoors;
     }
     /**
      * A getter to get question and answer.
@@ -68,9 +69,18 @@ public class Room implements Serializable, RoomInterface {
      * @return returns ture if correct otherwise false.
      */
     public boolean isAnswerCorrect(String playerAnswer) {
-
-        return myQA.getMyAnswer().equalsIgnoreCase(playerAnswer);
+        if (myQA.getMyAnswer().equalsIgnoreCase(playerAnswer)) {
+            return true;
+        } else {
+            doors--;
+            return false;
+        }
     }
+
+    public int getDoors() {
+        return doors;
+    }
+
     /**
      *  Add this method to lock the door if the answer is incorrect.
      */

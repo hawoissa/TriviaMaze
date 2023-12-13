@@ -15,6 +15,7 @@ public class QAPanel extends JPanel {
     private JLabel myQuestionLabel;
     private JPanel myAnswerBoxPanel;
    private Room currentRoom;
+   private JLabel chancesLabel;
 
     public QAPanel(final Maze theMaze) {
         myCurrentMaze = theMaze;
@@ -31,6 +32,9 @@ public class QAPanel extends JPanel {
         updateQuestionLabel(myCurrentMaze.getCurrentQuestion());
 
         myAnswerBoxPanel = new JPanel();  // Use a JPanel instead of a JTextField
+        chancesLabel = new JLabel("Doors unlocked: " + currentRoom.getDoors());
+        myAnswerBoxPanel.add(chancesLabel);
+
         setMyAnswerBox(currentRoom.getCurrentQuestionType());
         setupLayout();
     }
@@ -62,17 +66,29 @@ public class QAPanel extends JPanel {
     // Add a method to display a reaction based on the answer correctness
     private void displayAnswerReaction(boolean isAnswerCorrect) {
         if (isAnswerCorrect) {
-            JOptionPane.showMessageDialog(this, "Correct! The door is now unlocked.");
+            JOptionPane.showMessageDialog(this, "Correct! You can move.");
         } else {
             JOptionPane.showMessageDialog(this, "Wrong! The door is locked.");
         }
     }
 
     // Modify the handleAnswerSelection method to call the answerQuestion method and display a reaction
+
     private void handleAnswerSelection(String selectedAnswer) {
         if (myCurrentMaze.isGameOn()) {
             boolean isAnswerCorrect = myCurrentMaze.answerQuestion(selectedAnswer);
             displayAnswerReaction(isAnswerCorrect);
+
+            if (!isAnswerCorrect) {
+
+                if (currentRoom.getDoors() == 0) {
+                    // Game over condition
+                    JOptionPane.showMessageDialog(this, "Game Over! You've locked all doors.");
+                    myCurrentMaze.resetGame();
+                    // Optionally, you can restart the game or take other actions
+                }
+                chancesLabel.setText("Doors unlocked: " + currentRoom.getDoors());
+            }
 
             if (isAnswerCorrect) {
                 // If the answer is correct, update the maze panel
@@ -91,6 +107,7 @@ public class QAPanel extends JPanel {
         String currentQuestionType = currentRoom.getCurrentQuestionType();
         updateQuestionLabel(currentRoom.getQuestion());
         setMyAnswerBox(currentQuestionType);
+        updateChancesLabel();
     }
 
     // Add a method to set the answer box based on the question type
@@ -124,7 +141,8 @@ public class QAPanel extends JPanel {
             myAnswerBoxPanel.add(answerTextField);
             myAnswerBoxPanel.add(submitButton);
         }
-
+        chancesLabel.setText("Doors unlocked: " + currentRoom.getDoors());
+        myAnswerBoxPanel.add(chancesLabel);
         myAnswerBoxPanel.revalidate();
         myAnswerBoxPanel.repaint();
     }
@@ -135,6 +153,12 @@ public class QAPanel extends JPanel {
                 maxCharactersPerLine + "})", "$1<br>") + "</html>";
         myQuestionLabel.setText(formattedText);
         //myQuestionLabel.setText("Question: " + currentQuestion);
+    }
+
+    private void updateChancesLabel() {
+        chancesLabel.setText("Doors unlocked: " + currentRoom.getDoors());
+        myAnswerBoxPanel.revalidate();
+        myAnswerBoxPanel.repaint();
     }
 
     public JPanel getQAPanel() {
