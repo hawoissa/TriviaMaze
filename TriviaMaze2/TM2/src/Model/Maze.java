@@ -76,7 +76,7 @@ public class Maze implements Serializable {
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 // Assign a question to each room from questionList
-                myMaze[i][j] = new Room(letter, i, j, Door.getInstance(), getQuestionForRoom());
+                myMaze[i][j] = new Room(letter, i, j, Door.getInstance(), getQuestionForRoom(), calculateChances(i,j));
                 letter++;
             }
         }
@@ -277,7 +277,14 @@ public class Maze implements Serializable {
                 myCurrentRoom = myMaze[myX][myY];
             }
         }
-
+    public int calculateChances(int i, int j) {
+        int chance = 0;
+        if (i - 1 >= 0) chance++;
+        if (i + 1 < 4) chance++;
+        if (j - 1 >= 0) chance++;
+        if (j + 1 < 4) chance++;
+        return chance; // Example: return a fixed number of chances
+    }
     /**
      * Sets the conditions for game to end.
      * In order to do so, it will travers in maze.
@@ -285,7 +292,7 @@ public class Maze implements Serializable {
 //    public void isGameOver () {
 //
 //    }
-        public Boolean isGameOver () {
+        public boolean isGameOver () {
 
 
             char[][] solveMatrix = new char[4][4];
