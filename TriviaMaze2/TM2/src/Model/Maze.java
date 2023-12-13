@@ -156,7 +156,7 @@ public class Maze implements Serializable {
             QuestionAnswer1 currentQuestion = myCurrentRoom.getQuestionAnswer();
 
             if (myCurrentRoom.isAnswerCorrect(playerAnswer)) {
-                myCurrentRoom.getMyDoor().lock(false);
+                //myCurrentRoom.getMyDoor().lock(false);
                 return true;
             } else {
                 myCurrentRoom.lockDoor();
@@ -191,6 +191,7 @@ public class Maze implements Serializable {
          */
         public void saveGame (String filePath){
             try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(filePath))) {
+                resetGame();
                 out.writeObject(this);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -202,8 +203,9 @@ public class Maze implements Serializable {
          * @param filePath is the other file.
          * @return returns the maze object to deserialize.
          */
-        public static Maze loadGame (String filePath){
+        public Maze loadGame(String filePath){
             try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(filePath))) {
+                startGame();
                 return (Maze) in.readObject();
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();

@@ -36,6 +36,8 @@ public interface RoomInterface {
      * @return returns a question associated with room.
      */
     public String getQuestion();
+
+    public void setQuestionAnswer(QuestionAnswer1 newQA);
     /**
      * A getter to get question and answer.
      * @return returns question and answer associated with the room.

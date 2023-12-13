@@ -116,31 +116,31 @@ public class MazePanel extends JPanel {
         arrowButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if (myMaze.isGameOn()) {
+                    if (label == "↑") {
+                        myMaze.moveUp();
+                        myCurrentQAPanel.changeRoomLetter(myMaze.getMyCurrentRoom());
+                        System.out.println(myMaze.getMyCurrentRoom().getLetter());
+                    } else if (label == "↓") {
+                        myMaze.moveDown();
+                        myCurrentQAPanel.changeRoomLetter(myMaze.getMyCurrentRoom());
 
+                        System.out.println(myMaze.getMyCurrentRoom().getLetter());
+                    } else if (label == "←") {
+                        myMaze.moveLeft();
+                        myCurrentQAPanel.changeRoomLetter(myMaze.getMyCurrentRoom());
+                        System.out.println(myMaze.getMyCurrentRoom().getLetter());
+                    } else if (label == "→") {
+                        myMaze.moveRight();
+                        myCurrentQAPanel.changeRoomLetter(myMaze.getMyCurrentRoom());
 
-                if (label == "↑") {
-                    myMaze.moveUp();
-                    myCurrentQAPanel.changeRoomLetter(myMaze.getMyCurrentRoom());
-                    System.out.println(myMaze.getMyCurrentRoom().getLetter());
-                } else if (label == "↓") {
-                    myMaze.moveDown();
-                    myCurrentQAPanel.changeRoomLetter(myMaze.getMyCurrentRoom());
-
-                    System.out.println(myMaze.getMyCurrentRoom().getLetter());
-                } else if (label == "←") {
-                    myMaze.moveLeft();
-                    myCurrentQAPanel.changeRoomLetter(myMaze.getMyCurrentRoom());
-                    System.out.println(myMaze.getMyCurrentRoom().getLetter());
-                } else if (label == "→") {
-                    myMaze.moveRight();
-                    myCurrentQAPanel.changeRoomLetter(myMaze.getMyCurrentRoom());
-
-                    System.out.println(myMaze.getMyCurrentRoom().getLetter());
-                }
-                try {
-                    updateMazePanel();
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
+                        System.out.println(myMaze.getMyCurrentRoom().getLetter());
+                    }
+                    try {
+                        updateMazePanel();
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
                 }
             }
         });

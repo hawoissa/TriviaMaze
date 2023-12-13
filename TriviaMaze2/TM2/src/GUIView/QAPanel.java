@@ -70,17 +70,17 @@ public class QAPanel extends JPanel {
 
     // Modify the handleAnswerSelection method to call the answerQuestion method and display a reaction
     private void handleAnswerSelection(String selectedAnswer) {
-        boolean isAnswerCorrect = myCurrentMaze.answerQuestion(selectedAnswer);
-        displayAnswerReaction(isAnswerCorrect);
+        if (myCurrentMaze.isGameOn()) {
+            boolean isAnswerCorrect = myCurrentMaze.answerQuestion(selectedAnswer);
+            displayAnswerReaction(isAnswerCorrect);
 
-        if (isAnswerCorrect) {
-            // If the answer is correct, update the maze panel
-            //try {
-                //NEED TO UPDATE MAZE
+            if (isAnswerCorrect) {
+                // If the answer is correct, update the maze panel
                 updateContent();
-//            } catch (IOException ex) {
-//                throw new RuntimeException(ex);
-//            }
+            }
+        } else {
+            // Optionally, show a message to inform the user that the game is not on
+            JOptionPane.showMessageDialog(this, "The game is not currently running.");
         }
     }
 
