@@ -45,15 +45,18 @@ public class ToolBar {
     private JMenu myHelpMenu;
     private StatsPanel myStatsPanel;
 
+    private Maze myMaze;
+
     /**
      * Constructs the class and initializes the fields.
      */
-    public ToolBar(StatsPanel myStatsPanel) {
+    public ToolBar(StatsPanel myStatsPanel, Maze theMaze) {
         myToolBar = new JMenuBar();
         myToolBar.setBorder(BorderFactory.createLineBorder(Color.black));
         setMazeHelpMenu();
         addListeners();
         this.myStatsPanel = myStatsPanel;
+        myMaze=theMaze;
         setMyShortCuts();
     }
 
@@ -113,7 +116,7 @@ public class ToolBar {
             String fileName = JOptionPane.showInputDialog("Enter saved game to reload:");
             if (fileName != null) {
                 try {
-                    Maze myMaze = Maze.loadGame(fileName);
+                    myMaze.loadGame(fileName);
                     myStart.setEnabled(false);
                     mySave.setEnabled(true);
                     myLoad.setEnabled(false);
@@ -136,7 +139,6 @@ public class ToolBar {
             if (fileName != null) {
                 String filePath = fileName + ".ser";
                 try {
-                    Maze myMaze = new Maze();
                     myMaze.saveGame(filePath);
                     myStart.setEnabled(true);
                     mySave.setEnabled(false);
@@ -157,7 +159,6 @@ public class ToolBar {
 
     public void addStartGameListener(JMenuItem theStart) {
         theStart.addActionListener(theEvent -> {
-            Maze myMaze = new Maze();
             myMaze.startGame();
             myStatsPanel.getDisTimer().start();
             SystemSound sound = new SystemSound(new File("Game-Opener.wav"));
