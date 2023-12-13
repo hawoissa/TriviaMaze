@@ -77,20 +77,18 @@ public class MazePanel extends JPanel {
 
         if (myMaze.getMyCurrentRoom().getLetter() == letter) {
 
-            contentPanel.setBackground(Color.black);
-
+            contentPanel.setBackground(Color.BLACK);
+            letterLabel.setText("?");
+            letterLabel.setForeground(Color.WHITE);
         }
 
-        if (myMaze.getMyCurrentRoom().getMyDoor().isLocked()) {
-            letterLabel.setText("X");
-        }
+
         contentPanel.add(letterLabel, BorderLayout.CENTER);
         letterPanel.add(contentPanel, BorderLayout.CENTER);
         return letterPanel;
     }
     public void updateMazePanel() throws IOException {
         myMazePanel.removeAll();
-
         for (int row = 0; row < 4; row++) {
             for (int col = 0; col < 4; col++) {
                 char letter = letterGrid[row][col];
