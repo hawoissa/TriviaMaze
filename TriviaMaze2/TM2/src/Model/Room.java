@@ -28,7 +28,8 @@ public class Room implements Serializable, RoomInterface {
     private char myRoomLetter;
     /** Holds question and answer associated with a room.*/
     private QuestionAnswer1 myQA;
-    private int doors;
+    /** Holds an instance of door. */
+    private int myDoors;
     /**
      * Constructor initializes the fields.
      * @param letter is the letter other letter associated with a room.
@@ -44,7 +45,7 @@ public class Room implements Serializable, RoomInterface {
         myY = theY;
         myDoor = theDoor;
         myQA = theQA;
-        doors = numDoors;
+        myDoors = numDoors;
     }
     /**
      * A getter to get question and answer.
@@ -53,8 +54,13 @@ public class Room implements Serializable, RoomInterface {
     public QuestionAnswer1 getQuestionAnswer() {
         return myQA;
     }
-    public void setQuestionAnswer(QuestionAnswer1 newQA) {
-        myQA = newQA;
+
+    /**
+     * A setter the set question and answer.
+     * @param theNewQA is the other question answer.
+     */
+    public void setQuestionAnswer(QuestionAnswer1 theNewQA) {
+        myQA = theNewQA;
     }
     /**
      * A getter to get the question type.
@@ -65,20 +71,23 @@ public class Room implements Serializable, RoomInterface {
     }
     /**
      * Checks if the player answered the question is correctly.
-     * @param playerAnswer is the answer of the player.
+     * @param thePlayerAnswer is the answer of the player.
      * @return returns ture if correct otherwise false.
      */
-    public boolean isAnswerCorrect(String playerAnswer) {
-        if (myQA.getMyAnswer().equalsIgnoreCase(playerAnswer)) {
+    public boolean isAnswerCorrect(String thePlayerAnswer) {
+        if (myQA.getMyAnswer().equalsIgnoreCase(thePlayerAnswer)) {
             return true;
         } else {
-            doors--;
+            myDoors--;
             return false;
         }
     }
-
+    /**
+     * A method that returns a door.
+     * @return returns the door.
+     */
     public int getDoors() {
-        return doors;
+        return myDoors;
     }
 
     /**
