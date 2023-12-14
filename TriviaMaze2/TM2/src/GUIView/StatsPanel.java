@@ -8,19 +8,49 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * StatsPanel class represents the panel displaying game statistics in the maze game.
+ */
 public class StatsPanel extends JPanel {
 
-    private JButton myStartButton;
-    private JPanel myStatsPanel;
-    private Maze myCurrentMaze;
-    private JLabel myRoomLabel;
-    private JLabel myTimerLabel = new JLabel("00:00"); // Timer label initialization
+    /**
+     * Panel containing various statistics labels.
+     */
+    private final JPanel myStatsPanel;
 
+    /**
+     * The maze associated with the StatsPanel.
+     */
+    private final Maze myCurrentMaze;
+
+    /**
+     * Label displaying the elapsed time in the game.
+     */
+    private final JLabel myTimerLabel = new JLabel("00:00"); // Timer label initialization
+
+    /**
+     * Delay for the timer in milliseconds.
+     */
     private final int myDelay = 1000;
+
+    /**
+     * Elapsed time in the game.
+     */
     private int myElapsedTime;
+
+    /**
+     * Minutes component of the elapsed time.
+     */
     private int myMinutes;
+
+    /**
+     * Seconds component of the elapsed time.
+     */
     private int mySeconds;
 
+    /**
+     * Timer for updating the elapsed time label.
+     */
     private final Timer myDisTimer = new Timer(myDelay, new ActionListener() {
         @Override
         public void actionPerformed(final ActionEvent theE) {
@@ -37,11 +67,26 @@ public class StatsPanel extends JPanel {
         }
     });
 
-    private JLabel playerNameLabel = createStyledLabel("Player: ");
-    private JLabel scoreLabel = createStyledLabel("Mistakes: ");
-    private JLabel gameStatusLabel = createStyledLabel("Game Status: ");
-    private JLabel customMessageLabel = createStyledLabel("Hope you enjoy the game!");
+    /**
+     * Label displaying the player's name.
+     */
+    private JLabel playerNameLabel;
 
+    /**
+     * Label displaying a custom message.
+     */
+    private final JLabel customMessageLabel = createStyledLabel("Hope you enjoy the game!");
+
+    /**
+     * Label displaying the number of doors unlocked in the current room.
+     */
+    private JLabel chancesLabel;
+
+    /**
+     * Constructs a StatsPanel object with the given maze.
+     *
+     * @param theMaze The maze associated with the StatsPanel.
+     */
     public StatsPanel(final Maze theMaze) {
         myCurrentMaze = theMaze;
         myStatsPanel = new JPanel();
@@ -52,16 +97,20 @@ public class StatsPanel extends JPanel {
         myTimerLabel.setFont(new Font("SansSerif", Font.PLAIN, 20));
         myTimerLabel.setForeground(Color.WHITE);
 
+        playerNameLabel = createStyledLabel("Player: ");
+
+        // Set the maximum width for chancesLabel
+        chancesLabel = createStyledLabel("Doors unlocked in current room: " +
+                myCurrentMaze.getMyCurrentRoom().getDoors());
+
         // Add user information labels to the panel
         playerNameLabel.setFont(new Font("SansSerif", Font.BOLD, 14));
-        scoreLabel.setFont(new Font("SansSerif", Font.BOLD, 14));
-        gameStatusLabel.setFont(new Font("SansSerif", Font.BOLD, 14));
+        chancesLabel.setFont(new Font("SansSerif", Font.BOLD, 14));
         customMessageLabel.setFont(new Font("SansSerif", Font.PLAIN, 14));
 
         myStatsPanel.add(myTimerLabel); // Add myTimerLabel to the panel
         myStatsPanel.add(playerNameLabel);
-        myStatsPanel.add(scoreLabel);
-        myStatsPanel.add(gameStatusLabel);
+        myStatsPanel.add(chancesLabel);
         myStatsPanel.add(customMessageLabel);
 
         // Start the timer if the game is on
@@ -70,21 +119,31 @@ public class StatsPanel extends JPanel {
         }
     }
 
+    /**
+     * Creates a styled JLabel with HTML formatting.
+     *
+     * @param text The text content of the label.
+     * @return The styled JLabel.
+     */
     private JLabel createStyledLabel(String text) {
-        JLabel label = new JLabel(text);
+        JLabel label = new JLabel("<html><div style='width: 150px;'>" + text + "</div></html>");
         label.setForeground(Color.WHITE);
         label.setAlignmentX(Component.CENTER_ALIGNMENT);
         return label;
     }
 
-    public void changeRoomLetter(final Room theRoom) {
-        myRoomLabel.setText(Character.toString(theRoom.getLetter()));
-    }
-
+    /**
+     * Gets the StatsPanel.
+     *
+     * @return The StatsPanel.
+     */
     public JPanel getMyStatsPanelPanel() {
         return myStatsPanel;
     }
 
+    /**
+     * Updates the timer label and chances label.
+     */
     private void updateTimerLabel() {
         long totalTimeMillis = myCurrentMaze.getTotalTime() * 60 * 1000;
         long minutes = (totalTimeMillis / 1000) / 60;
@@ -92,12 +151,24 @@ public class StatsPanel extends JPanel {
 
         String formattedTime = String.format("%d:%02d", minutes, seconds);
         myTimerLabel.setText("Total Time: " + formattedTime);
+        chancesLabel.setText(("Doors unlocked in current room: " +
+                myCurrentMaze.getMyCurrentRoom().getDoors()));
     }
 
+    /**
+     * Gets the timer label.
+     *
+     * @return The timer label.
+     */
     public JLabel getTimerLabel() {
         return myTimerLabel;
     }
 
+    /**
+     * Gets the display timer.
+     *
+     * @return The display timer.
+     */
     public Timer getDisTimer() {
         return myDisTimer;
     }
