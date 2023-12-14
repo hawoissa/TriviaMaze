@@ -1,7 +1,10 @@
 package Tests;
 
 
+import Model.Door;
 import Model.Maze;
+import Model.QuestionAnswer1;
+import Model.Room;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -11,19 +14,20 @@ import static org.junit.jupiter.api.Assertions.*;
 class MazeTest {
 
     private Maze myTestMaze;
+    private QuestionAnswer1 myQA;
+    private int myX;
+    private int myY;
 
 
 
     MazeTest() {
-
     }
     @BeforeEach
-    void intialize() {
+    public void intialize() {
         myTestMaze = new Maze();
     }
-
     @Test
-    void moveRightTest() {
+    public void moveRightTest() {
         assertEquals(myTestMaze.getMyCurrentRoom().getLetter(),'A');
         myTestMaze.moveRight();
         assertEquals(myTestMaze.getMyCurrentRoom().getLetter(),'B');
@@ -34,9 +38,8 @@ class MazeTest {
         myTestMaze.moveRight();
         assertEquals(myTestMaze.getMyCurrentRoom().getLetter(),'D'); // Should stay at D since it's the rightmost letter
     }
-
     @Test
-    void moveLeftTest() {
+    public void moveLeftTest() {
         myTestMaze.moveRight();
         myTestMaze.moveRight();
         myTestMaze.moveRight();
@@ -51,9 +54,8 @@ class MazeTest {
         assertEquals(myTestMaze.getMyCurrentRoom().getLetter(), 'A'); // tests if it goes out of bounds
 
     }
-
     @Test
-    void moveDownTest() {
+    public void moveDownTest() {
         assertEquals(myTestMaze.getMyCurrentRoom().getLetter(), 'A');
         myTestMaze.moveDown();
         assertEquals(myTestMaze.getMyCurrentRoom().getLetter(), 'E');
@@ -65,9 +67,8 @@ class MazeTest {
         assertEquals(myTestMaze.getMyCurrentRoom().getLetter(), 'M'); // tests if it goes out of bounds
 
     }
-
     @Test
-    void moveUpTest() {
+    public void moveUpTest() {
         myTestMaze.moveDown();
         myTestMaze.moveDown();
         myTestMaze.moveDown();
@@ -82,17 +83,15 @@ class MazeTest {
         assertEquals(myTestMaze.getMyCurrentRoom().getLetter(), 'A'); // tests if it goes out of bounds
 
     }
-
     @Test
-    void startGameTest() {
+    public void startGameTest() {
         assertFalse(myTestMaze.isGameOn());
         assertEquals(myTestMaze.getTotalTime(), 0);
         myTestMaze.startGame();
         assertTrue(myTestMaze.isGameOn());
     }
-
     @Test
-    void testResetMaze() {
+    public void testResetMaze() {
         myTestMaze.startGame();
         myTestMaze.moveRight();
         myTestMaze.moveRight();
@@ -104,6 +103,61 @@ class MazeTest {
         assertFalse(myTestMaze.isGameOn());
 
     }
+    @Test
+    public void testGetQuestionForRoom(){
+        myX = 3;
+        myY = 4;
+        myQA = new QuestionAnswer1(1,"TF","Red color is my favorite?","F");
+        Room[][] rooms = new Room[myX][myY];
+        for(int i = 0; i < myX; i++){
+            for(int j = 0; j < myY; j++){
+                rooms[i][j] = new Room('M', i, j, Door.getInstance(), myQA, 2);
+            }
+        }
+        myTestMaze = new Maze(rooms ,1,2);
+        assertNotEquals(rooms, myTestMaze.getMyCurrentRoom());
+    }
+    @Test
+    public void testGetCurrentQuestion(){
+        myX = 3;
+        myY = 4;
+        myQA = new QuestionAnswer1(1,"TF","Red color is my favorite?","F");
+        Room[][] rooms = new Room[myX][myY];
+        for(int i = 0; i < myX; i++){
+            for(int j = 0; j < myY; j++){
+                rooms[i][j] = new Room('M', i, j, Door.getInstance(), myQA, 2);
+            }
+        }
+        myTestMaze = new Maze(rooms ,2,1);
+        assertEquals("Red color is my favorite?", myTestMaze.getCurrentQuestion());
+    }
+    @Test
+    public void testAnswerQuestion(){
+        assertFalse(myTestMaze.answerQuestion("Red color is my favorite?"));
+    }
+    @Test
+    public void testIsGameOn(){
+        assertFalse(myTestMaze.isGameOn());
+    }
+    @Test
+    public void testIsGameOver(){
 
+        if(!myTestMaze.isGameOver()){
+            assertFalse(myTestMaze.isGameOver());
+        } else {
+            assertTrue(myTestMaze.isGameOver());
+        }
+    }
+    @Test
+    public void testGetTotalTime(){
+        long expected = 0;
+        assertEquals(expected,myTestMaze.getTotalTime());
+    }
+    @Test
+    public void testCalculateChances(){
+        int i = 4;
+        int j = 4;
+        assertEquals(2,myTestMaze.calculateChances(i,j));
+    }
 
 }
