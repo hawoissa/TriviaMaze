@@ -16,7 +16,7 @@ import java.io.Serializable;
 public class Door implements DoorInterface, Serializable {
     /** Holds the lock status.*/
     private boolean myIsLocked;
-
+    /** Holds global instance of Door for singleton purpose.*/
     private static Door myDoor = new Door();
 
 
@@ -42,6 +42,10 @@ public class Door implements DoorInterface, Serializable {
         myIsLocked = theLocked;
     }
 
+    /**
+     * A singleton patter method to return an instance of current class.
+     * @return returns door instance.
+     */
     public static Door getInstance(){
         return myDoor;
     }
