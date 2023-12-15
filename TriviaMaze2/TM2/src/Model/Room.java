@@ -14,7 +14,7 @@ import java.io.Serializable;
  * Each room may have trivia questions.
  * Serializable will help to save and load an object.
  */
-public class Room implements Serializable {
+public class Room implements Serializable, RoomInterface {
     /** A special number used when saving and loading objects.*/
     @Serial
     private static final long serialVersionUID = -89283998989899829L;
@@ -28,7 +28,8 @@ public class Room implements Serializable {
     private char myRoomLetter;
     /** Holds question and answer associated with a room.*/
     private QuestionAnswer1 myQA;
-
+    /** Holds an instance of door. */
+    private int myDoors;
     /**
      * Constructor initializes the fields.
      * @param letter is the letter other letter associated with a room.
@@ -38,12 +39,13 @@ public class Room implements Serializable {
      * @param theQA is the other question and answer associated with the room.
      */
     public Room(final char letter, final int theX, final int theY,
-                final Door theDoor, final QuestionAnswer1 theQA) {
+                final Door theDoor, final QuestionAnswer1 theQA, final int numDoors) {
         myRoomLetter = letter;
         myX = theX;
         myY = theY;
         myDoor = theDoor;
         myQA = theQA;
+        myDoors = numDoors;
     }
     /**
      * A getter to get question and answer.
@@ -52,8 +54,13 @@ public class Room implements Serializable {
     public QuestionAnswer1 getQuestionAnswer() {
         return myQA;
     }
-    public void setQuestionAnswer(QuestionAnswer1 newQA) {
-        myQA = newQA;
+
+    /**
+     * A setter the set question and answer.
+     * @param theNewQA is the other question answer.
+     */
+    public void setQuestionAnswer(QuestionAnswer1 theNewQA) {
+        myQA = theNewQA;
     }
     /**
      * A getter to get the question type.
@@ -64,13 +71,25 @@ public class Room implements Serializable {
     }
     /**
      * Checks if the player answered the question is correctly.
-     * @param playerAnswer is the answer of the player.
+     * @param thePlayerAnswer is the answer of the player.
      * @return returns ture if correct otherwise false.
      */
-    public boolean isAnswerCorrect(String playerAnswer) {
-
-        return myQA.getMyAnswer().equalsIgnoreCase(playerAnswer);
+    public boolean isAnswerCorrect(String thePlayerAnswer) {
+        if (myQA.getMyAnswer().equalsIgnoreCase(thePlayerAnswer)) {
+            return true;
+        } else {
+            myDoors--;
+            return false;
+        }
     }
+    /**
+     * A method that returns a door.
+     * @return returns the door.
+     */
+    public int getDoors() {
+        return myDoors;
+    }
+
     /**
      *  Add this method to lock the door if the answer is incorrect.
      */

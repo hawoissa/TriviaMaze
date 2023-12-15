@@ -15,7 +15,49 @@ public interface MazeInterface {
      * @return
      */
     public Room getMyCurrentRoom();
-
+    /**
+     * A getter to get current question.
+     * @return returns a string of question.
+     */
+    public String getCurrentQuestion();
+    /**
+     * A method to check the player's answer and update the game state.
+     * @return returns ture if answer is correct otherwise false.
+     */
+    public boolean answerQuestion(String thePlayerAnswer);
+    /**
+     * Sets the game to start.
+     */
+    public void startGame();
+    /**
+     * Sets the game to reset.
+     */
+    public void resetGame();
+    /**
+     * Sets the game to load.
+     * @param theFilePath is the other file.
+     * @return returns the maze object to deserialize.
+     */
+    public Maze loadGame(String theFilePath);
+    /**
+     * Sets the game to save.
+     * @param theFilePath is the other file.
+     */
+    public void saveGame(String theFilePath);
+    /**
+     * A getter to get total time of game played.
+     * @return returns total time.
+     */
+    public long getTotalTime();
+    /**
+     * A getter if game is on or not.
+     * @return returns ture if on otherwise false.
+     */
+    public boolean isGameOn();
+    /**
+     * Sets the conditions for game to end.
+     */
+    public boolean isGameOver();
     /**
      * Moves the player up in maze.
      */

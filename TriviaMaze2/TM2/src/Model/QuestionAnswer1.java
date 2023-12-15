@@ -4,6 +4,7 @@
     Quarter: Winter 2023
  */
 package Model;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -11,7 +12,7 @@ import java.util.ArrayList;
  * @author Matiullah Jalal.
  * @version 24 November 2023.
  */
-public class QuestionAnswer1 {
+public class QuestionAnswer1 implements QuestionAnswerInterface, Serializable {
     /** Holds ID of the question. */
     private final int myID;
     /** Holds Type of the question. */
@@ -45,6 +46,7 @@ public class QuestionAnswer1 {
      * Getter gets the ID.
      * @return returns the ID.
      */
+    @Override
     public int getMyID(){
         return myID;
     }
@@ -70,6 +72,7 @@ public class QuestionAnswer1 {
     public String getMyAnswer(){
         return myAnswer;
     }
+
     /**
      * Setter to add questions to arraylist.
      */

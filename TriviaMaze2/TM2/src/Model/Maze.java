@@ -1,45 +1,73 @@
 /*
     This is the Maze class
-    Name: Matiullah Jalal
+    Name: Zakirye Luqman, Hawo Issa, Matiullah Jalal
     Date: 10/25/2023
     Quarter: Autumn 2023
  */
 package Model;
 
 import java.io.*;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Random;
 
-import Model.QuestionAnswer1;
-
-public class Maze implements Serializable {
+/**
+ * The maze class shows a maze with doors and rooms.
+ * Each room in the maze has door, and these
+ * doors can be accessed through specific questions.
+ */
+public class Maze implements Serializable, MazeInterface {
+    /**
+     * Holds 2D grid of the maze.
+     */
     private Room[][] myMaze;
+    /**
+     * Holds current room.
+     */
     private Room myCurrentRoom;
+    /**
+     * Holds if the game is already started.
+     */
     private boolean myIsGameStarted;
+    /**
+     * Holds time start.
+     */
     private long myStartTime;
+    /**
+     * Holds time end.
+     */
     private long myEndTime;
+    /**
+     * Holds the x-coordinate.
+     */
     private int myX;
+    /**
+     * Holds the y-coordinate.
+     */
     private int myY;
-    private ArrayList<QuestionAnswer1> questionList;
+    /**
+     * Holds the question list .
+     */
+    private ArrayList<QuestionAnswer1> myQuestionList;
 
+    /**
+     * A default constructor to set a 4x4 maze.
+     */
     public Maze() {
         myX = 0;
         myY = 0;
 
         myMaze = new Room[4][4];
-        questionList = new ArrayList<>();
-
-        // Create an instance of TriviaQADatabase and populate questionList
-        TriviaQADatabase triviaDatabase = new TriviaQADatabase();
-        triviaDatabase.initializeDatabase();
-        triviaDatabase.getQAFromDataBase(questionList);
+        myQuestionList = new ArrayList<>();
+        // Create an instance of QuestionFactory and populate questionList
+        QuestionFactory questionFactory = new QuestionFactory();
+        questionFactory.myDataBase.initializeDatabase();
+        questionFactory.myDataBase.getQAFromDataBase(myQuestionList);
 
         char letter = 'A';
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 // Assign a question to each room from questionList
-                myMaze[i][j] = new Room(letter, i, j, Door.getInstance(), getQuestionForRoom());
+                myMaze[i][j] = new Room(letter, i, j, Door.getInstance(), getQuestionForRoom(), calculateChances(i,j));
                 letter++;
             }
         }
@@ -47,59 +75,93 @@ public class Maze implements Serializable {
         myCurrentRoom = myMaze[0][0];
     }
 
-    // Add this method to get a question from questionList for a room
+    /**
+     * A method that gets a question from questionList for a room.
+     * @return returns the question list otherwise null.
+     */
     private QuestionAnswer1 getQuestionForRoom() {
         // You can implement your logic to get a question from questionList
         // For example, you can remove a question from the list and return it
-        if (!questionList.isEmpty()) {
+        if (!myQuestionList.isEmpty()) {
             Random random = new Random();
-            int r = random.nextInt(questionList.size());
-            return questionList.remove(r);
+            int r = random.nextInt(myQuestionList.size());
+            return myQuestionList.remove(r);
         } else {
             return null; // Handle the case when questionList is empty
         }
     }
 
-    // Add methods for updating, deleting, and adding questions to rooms
-    public void updateQuestionForRoom(int x, int y, QuestionAnswer1 newQuestion) {
-        if (isValidCoordinate(x, y)) {
-            myMaze[x][y].setQuestionAnswer(newQuestion);
+    /**
+     * A method that update question for room.
+     * @param theX is the x-coordinate.
+     * @param theY is the y-Coordinate.
+     * @param theNewQuestion is the other question.
+     */
+    public void updateQuestionForRoom(int theX, int theY, QuestionAnswer1 theNewQuestion) {
+        if (isValidCoordinate(theX, theY)) {
+            myMaze[theX][theY].setQuestionAnswer(theNewQuestion);
+        }
+    }
+    /**
+     * A method that deletes a question for room.
+     * @param theX is the x-coordinate.
+     * @param theY is the y-Coordinate.
+     */
+    public void deleteQuestionForRoom(int theX, int theY) {
+        if (isValidCoordinate(theX, theY)) {
+            myMaze[theX][theY].setQuestionAnswer(null);
+        }
+    }
+    /**
+     * A method that add question to room.
+     * @param theX is the x-coordinate.
+     * @param theY is the y-Coordinate.
+     * @param theNewQuestion is the other question.
+     */
+    public void addQuestionToRoom(int theX, int theY, QuestionAnswer1 theNewQuestion) {
+        if (isValidCoordinate(theX, theY)) {
+            myMaze[theX][theY].setQuestionAnswer(theNewQuestion);
         }
     }
 
-    public void deleteQuestionForRoom(int x, int y) {
-        if (isValidCoordinate(x, y)) {
-            myMaze[x][y].setQuestionAnswer(null);
-        }
+    /**
+     * A method that checks for validity of coordinates.
+     * @param theX
+     * @param theY
+     * @return returns true if valid otherwise false.
+     */
+    private boolean isValidCoordinate(int theX, int theY) {
+        return theX >= 0 && theX < myMaze.length && theY >= 0 && theY < myMaze[0].length;
     }
-
-    public void addQuestionToRoom(int x, int y, QuestionAnswer1 newQuestion) {
-        if (isValidCoordinate(x, y)) {
-            myMaze[x][y].setQuestionAnswer(newQuestion);
-        }
-    }
-
-    private boolean isValidCoordinate(int x, int y) {
-        return x >= 0 && x < myMaze.length && y >= 0 && y < myMaze[0].length;
-    }
-
-    public Maze(Room[][] maze, int currentX, int currentY) {
-        myMaze = maze;
-        myX = currentX;
-        myY = currentY;
+    /**
+     * A constructor to initialize the fields.
+     * @param theMaze is the maze.
+     * @param theCurrentX is the x-coordinate.
+     * @param theCurrentY is the y-coordinate.
+     */
+    public Maze(Room[][] theMaze, int theCurrentX, int theCurrentY) {
+        myMaze = theMaze;
+        myX = theCurrentX;
+        myY = theCurrentY;
         myCurrentRoom = myMaze[myX][myY];
     }
-
+    /**
+     * A getter to get current question.
+     * @return returns a string of question.
+     */
     public String getCurrentQuestion() {
         return myCurrentRoom.getQuestionAnswer().getMyQuestion();
     }
 
-    // Add this method to check the player's answer and update the game state
-    public boolean answerQuestion(String playerAnswer) {
+    /**
+     * A method to check the player's answer and update the game state.
+     * @return returns ture if answer is correct otherwise false.
+     */
+    public boolean answerQuestion (String thePlayerAnswer){
         QuestionAnswer1 currentQuestion = myCurrentRoom.getQuestionAnswer();
 
-        if (myCurrentRoom.isAnswerCorrect(playerAnswer)) {
-            myCurrentRoom.getMyDoor().lock(false);
+        if (myCurrentRoom.isAnswerCorrect(thePlayerAnswer)) {
+            //myCurrentRoom.getMyDoor().lock(false);
             return true;
         } else {
             myCurrentRoom.lockDoor();
@@ -107,12 +169,18 @@ public class Maze implements Serializable {
         }
     }
 
-    public void startGame() {
+    /**
+     * Sets the game to start.
+     */
+    public void startGame () {
         myIsGameStarted = true;
         myStartTime = System.currentTimeMillis();
     }
 
-    public void resetGame() {
+    /**
+     * Sets the game to reset.
+     */
+    public void resetGame () {
         myIsGameStarted = false;
         myEndTime = System.currentTimeMillis();
 
@@ -122,24 +190,42 @@ public class Maze implements Serializable {
         myCurrentRoom = myMaze[0][0];
     }
 
-    public void saveGame(String filePath) {
-        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(filePath))) {
+    /**
+     * Sets the game to save.
+     * @param theFilePath is the other file.
+     */
+    public void saveGame(String theFilePath) {
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(theFilePath))) {
+            // Do not reset the game state before saving
+            myIsGameStarted=false;
             out.writeObject(this);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public static Maze loadGame(String filePath) {
-        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(filePath))) {
-            return (Maze) in.readObject();
+    /**
+     * Sets the game to load.
+     * @param theFilePath is the other file.
+     * @return returns the maze object to deserialize.
+     */
+    public Maze loadGame(String theFilePath) {
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(theFilePath+".ser"))) {
+            Maze loadedMaze = (Maze) in.readObject();
+            myIsGameStarted = true;
+
+            return loadedMaze;
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    public long getTotalTime() {
+    /**
+     * A getter to get total time of game played.
+     * @return returns total time.
+     */
+    public long getTotalTime () {
         if (myIsGameStarted) {
             long totalElapsedTime = (myEndTime - myStartTime);
             return totalElapsedTime / 60000; // Convert milliseconds to min
@@ -147,43 +233,74 @@ public class Maze implements Serializable {
         return 0;
     }
 
-    public boolean isGameOn() {
+    /**
+     * A getter if game is on or not.
+     * @return returns ture if on otherwise false.
+     */
+    public boolean isGameOn () {
         return myIsGameStarted;
     }
 
-    public Room getMyCurrentRoom() {
+    /**
+     * A getter to get current room.
+     * @return returns current room.
+     */
+    public Room getMyCurrentRoom () {
         return myCurrentRoom;
     }
 
-    public void moveUp() {
+    /**
+     * A setter to set the entity to move up.
+     */
+    public void moveUp () {
         if (myX > 0) {
             myX--;
             myCurrentRoom = myMaze[myX][myY];
         }
     }
-
-    public void moveDown() {
+    /**
+     * A setter to set the entity to move down.
+     */
+    public void moveDown () {
         if (myX < myMaze.length - 1) {
             myX++;
             myCurrentRoom = myMaze[myX][myY];
         }
     }
-
-    public void moveRight() {
+    /**
+     * A setter to set the entity to move right.
+     */
+    public void moveRight () {
         if (myY < myMaze[0].length - 1) {
             myY++;
             myCurrentRoom = myMaze[myX][myY];
         }
     }
-
-    public void moveLeft() {
+    /**
+     * A setter to set the entity to move left.
+     */
+    public void moveLeft () {
         if (myY > 0) {
             myY--;
             myCurrentRoom = myMaze[myX][myY];
         }
     }
 
-    public Boolean isGameOver() {
+    public int calculateChances(int theI, int theJ) {
+        int chance = 0;
+        if (theI - 1 >= 0) chance++;
+        if (theI + 1 < 4) chance++;
+        if (theJ - 1 >= 0) chance++;
+        if (theJ + 1 < 4) chance++;
+        return chance; // Example: return a fixed number of chances
+    }
+    /**
+     * Sets the conditions for game to end.
+     * In order to do so, it will travers in maze.
+     */
+    public boolean isGameOver () {
+
+
         char[][] solveMatrix = new char[4][4];
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
@@ -195,7 +312,7 @@ public class Maze implements Serializable {
             }
         }
 
-        boolean success =  move(solveMatrix, 0, 0);
+        boolean success = move(solveMatrix, 0, 0);
 
         if (success) {
             System.out.println("Succcess!!!");
@@ -215,46 +332,75 @@ public class Maze implements Serializable {
 
     }
 
-    private static boolean move(char[][] maze, int row, int col) {
+    /**
+     * A private method to support the movement of each cell in the maze.
+     * @param theMaze is the maze.
+     * @param theRow is the row.
+     * @param theCol is the column.
+     * @return returns true if movement was successful otherwise false.
+     */
+    private static boolean move ( char[][] theMaze, int theRow, int theCol){
         boolean success = false;
 
-        if (validMove(maze, row, col)) {
-            markVisited(maze, row, col);
-            if (atExit(maze, row, col))
+        if (validMove(theMaze, theRow, theCol)) {
+            markVisited(theMaze, theRow, theCol);
+            if (atExit(theMaze, theRow, theCol))
                 return true;
 
-            success = move(maze, row+1, col);
+            success = move(theMaze, theRow + 1, theCol);
 
             if (!success)
-                success = move(maze, row, col+1);
+                success = move(theMaze, theRow, theCol + 1);
             if (!success)
-                success = move(maze, row-1, col);
+                success = move(theMaze, theRow - 1, theCol);
             if (!success)
-                success = move(maze, row, col-1);
+                success = move(theMaze, theRow, theCol - 1);
             if (!success)
-                markDeadEnd(maze, row, col);
+                markDeadEnd(theMaze, theRow, theCol);
 
         }
 
         return success;
     }
 
-
-
-    private static void markDeadEnd(char[][] maze, int row, int col) {
-        maze[row][col] = 'd';
+    /**
+     * A method to set the dead end in the maze.
+     * @param theMaze is the maze.
+     * @param theRow is the row.
+     * @param theCol is the column.
+     */
+    private static void markDeadEnd ( char[][] theMaze, int theRow, int theCol){
+        theMaze[theRow][theCol] = 'd';
     }
 
-    private static void markVisited(char[][] maze, int row, int col) {
-        maze[row][col] = 'v';
+    /**
+     * A method to mark the cell that is already visited.
+     * @param theMaze is the maze.
+     * @param theRow is the row.
+     * @param theCol is the column.
+     */
+    private static void markVisited ( char[][] theMaze, int theRow, int theCol){
+        theMaze[theRow][theCol] = 'v';
     }
-
-    private static boolean atExit(char[][] maze, int row, int col) {
-        return row == maze.length - 1 && col == maze[row].length - 1;
-    }
-
-    private static boolean validMove(char[][] maze, int row, int col) {
-        return row >= 0 && row < maze.length && col >= 0
-                && col < maze[row].length && maze[row][col] == '.';
-    }
+    /**
+     * A method to mark the exit points of the maze.
+     * @param theMaze is the maze.
+     * @param theRow is the row.
+     * @param theCol is the column.
+     * @return returns true if at exit otherwise false.
+     */
+     private static boolean atExit ( char[][] theMaze, int theRow, int theCol){
+        return theRow == theMaze.length - 1 && theCol == theMaze[theRow].length - 1;
+     }
+        /**
+         * A method to check if move is valid or not.
+         * @param theMaze is the maze.
+         * @param theRow is the row.
+         * @param theCol is the column.
+         * @return returns true if move is valid otherwise false.
+         */
+     private static boolean validMove ( char[][] theMaze, int theRow, int theCol){
+        return theRow >= 0 && theRow < theMaze.length && theCol >= 0
+                && theCol < theMaze[theRow].length && theMaze[theRow][theCol] == '.';
+     }
 }

@@ -4,26 +4,31 @@ import Model.Maze;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.image.ImageObserver;
 import java.io.IOException;
-import java.text.AttributedCharacterIterator;
 
+/**
+ * The ControlsPanel class represents the control panel for the maze game.
+ * It includes arrow buttons for navigation and displays corresponding controls.
+ */
 public class ControlsPanel extends JPanel {
 
     private JPanel myControlPanel;
     private Maze myMaze;
     private MazePanel myMazePanel;
 
+    /**
+     * Constructs a ControlsPanel with the specified maze and maze panel.
+     *
+     * @param maze       The maze associated with the control panel.
+     * @param mazePanel  The maze panel associated with the control panel.
+     */
     public ControlsPanel(Maze maze, MazePanel mazePanel) {
         myMaze = maze;
         myMazePanel = mazePanel;
         myControlPanel = new JPanel(new GridLayout(3, 3));
-        myControlPanel.setPreferredSize(new Dimension(350, 250));
-        myControlPanel.setBackground(Color.ORANGE);
+        myControlPanel.setPreferredSize(new Dimension(865, 150));
+        myControlPanel.setBackground(new Color(240, 220, 30, 255));
 
         // Add empty labels for layout purposes
         myControlPanel.add(new JLabel());
@@ -49,10 +54,21 @@ public class ControlsPanel extends JPanel {
         g.drawString("\u2193 - Move Down", 10, 140);
     }
 
+    /**
+     * Gets the control panel.
+     *
+     * @return The control panel.
+     */
     public JPanel getMyControlPanel() {
         return myControlPanel;
     }
 
+    /**
+     * Creates an arrow button with the specified label.
+     *
+     * @param label The label for the arrow button.
+     * @return The created arrow button.
+     */
     private JButton createArrowButton(String label) {
         JButton arrowButton = new JButton(label);
         arrowButton.setPreferredSize(new Dimension(90, 90));
@@ -62,6 +78,13 @@ public class ControlsPanel extends JPanel {
         return arrowButton;
     }
 
+    /**
+     * Gets the direction associated with the specified label.
+     *
+     * @param label The label associated with the direction.
+     * @return The direction associated with the label.
+     * @throws IllegalArgumentException if the label is invalid.
+     */
     private Direction getDirectionForLabel(String label) {
         switch (label) {
             case "↑   Up Arrow":
@@ -77,30 +100,39 @@ public class ControlsPanel extends JPanel {
         }
     }
 
-    // Method to handle move based on user input or trigger
+    /**
+     * Handles the move based on the specified direction.
+     *
+     * @param direction The direction of the move.
+     */
     public void handleMove(Direction direction) {
-        switch (direction) {
-            case UP:
-                myMaze.moveUp();
-                break;
-            case DOWN:
-                myMaze.moveDown();
-                break;
-            case RIGHT:
-                myMaze.moveRight();
-                break;
-            case LEFT:
-                myMaze.moveLeft();
-                break;
-        }
-        // Optionally update UI or perform other actions after the move
-        try {
-            updateMazePanel();
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
+        if (myMaze.isGameOn()) {
+            switch (direction) {
+                case UP:
+                    myMaze.moveUp();
+                    break;
+                case DOWN:
+                    myMaze.moveDown();
+                    break;
+                case RIGHT:
+                    myMaze.moveRight();
+                    break;
+                case LEFT:
+                    myMaze.moveLeft();
+                    break;
+            }
+            // Optionally update UI or perform other actions after the move
+            try {
+                updateMazePanel();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
         }
     }
 
+    /**
+     * Enumeration representing the possible directions for a move.
+     */
     public enum Direction {
         UP,
         DOWN,
@@ -108,7 +140,13 @@ public class ControlsPanel extends JPanel {
         LEFT
     }
 
+    /**
+     * Updates the associated maze panel.
+     *
+     * @throws IOException if an I/O error occurs.
+     */
     private void updateMazePanel() throws IOException {
         myMazePanel.updateMazePanel();
     }
 }
+
