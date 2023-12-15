@@ -33,25 +33,18 @@ public class Frame extends JFrame {
         myMaze = new Maze();
         myFrameQAPanel = new QAPanel(myMaze); // Instantiate myFrameQAPanel first
         myStatsPanel = new StatsPanel(myMaze);
-        myToolBar = new ToolBar(myStatsPanel, myMaze);
-        myMazePanel = new MazePanel(myMaze, myFrameQAPanel);
+        myMazePanel = new MazePanel(myMaze, myFrameQAPanel, myStatsPanel);
+        myToolBar = new ToolBar(this, myStatsPanel, myMaze, myMazePanel);
         myControlPanel = new ControlsPanel(myMaze, myMazePanel);
 
         buildFrame();
         setLayout(new BorderLayout());
         setLayout(new FlowLayout(FlowLayout.CENTER,5,15));
-        //setFocusTraversalPolicy(new LayoutFocusTraversalPolicy());
-//        this.add(myMazePanel.getMyMazePanel());
-//        this.add(myStatsPanel.getMyStatsPanelPanel());
-//        this.add(myControlPanel.getMyControlPanel());
-//        this.add(myFrameQAPanel.getQAPanel());
         addToolBar();
         add(myFrameQAPanel.getQAPanel(), BorderLayout.WEST);
         add(myMazePanel.getMyMazePanel(), BorderLayout.CENTER);
         add(myStatsPanel.getMyStatsPanelPanel(), BorderLayout.EAST);
         add(myControlPanel.getMyControlPanel(), BorderLayout.SOUTH);
-
-
     }
 
     /**
@@ -94,5 +87,23 @@ public class Frame extends JFrame {
                 g2d.fillRect(0, 0, MY_WEIGHT, MY_HEIGHT);
             }
         });
+    }
+
+    public void resetMaze(Maze newMaze) {
+        // Update the MazePanel with the new Maze
+        myMaze = newMaze;
+        try {
+            myMazePanel.setMyMaze(myMaze);
+            myMazePanel.updateMazePanel();
+            myFrameQAPanel.setMyCurrentMaze(myMaze);
+            myFrameQAPanel.updateContent();
+            myStatsPanel.setChancesLabel();
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        revalidate();
+        repaint();
     }
 }

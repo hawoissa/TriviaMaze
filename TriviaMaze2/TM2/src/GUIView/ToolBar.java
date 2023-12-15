@@ -46,17 +46,20 @@ public class ToolBar {
     private StatsPanel myStatsPanel;
 
     private Maze myMaze;
-
+    private MazePanel mazePanel;
+    private Frame myFrame;
     /**
      * Constructs the class and initializes the fields.
      */
-    public ToolBar(StatsPanel myStatsPanel, Maze theMaze) {
+    public ToolBar(Frame theFrame, StatsPanel myStatsPanel, Maze theMaze, MazePanel theMazePanel) {
         myToolBar = new JMenuBar();
         myToolBar.setBorder(BorderFactory.createLineBorder(Color.black));
         setMazeHelpMenu();
         addListeners();
         this.myStatsPanel = myStatsPanel;
         myMaze=theMaze;
+        this.mazePanel = theMazePanel;
+        myFrame=theFrame;
         setMyShortCuts();
     }
 
@@ -119,20 +122,25 @@ public class ToolBar {
             String fileName = JOptionPane.showInputDialog("Enter saved game to reload:");
             if (fileName != null) {
                 try {
-                    myMaze.loadGame(fileName);
+                    Maze newMaze = myMaze.loadGame(fileName);
+
+                    // Pass the new maze to the Frame's resetMaze method
+                    myFrame.resetMaze(newMaze);
+
                     myStart.setEnabled(false);
                     mySave.setEnabled(true);
                     myLoad.setEnabled(false);
                     myExit.setEnabled(true);
+                    myStatsPanel.setPlayerName("Enter your player name again: ");
+                    SystemSound loadGameSound = new SystemSound(new File("load-game.wav"));
+                    loadGameSound.gameSounds();
                 } catch (Exception e) {
                     e.printStackTrace();
                     JOptionPane.showMessageDialog(null,
-                        "Error loading the game: " + e.getMessage(), "Error",
-                        JOptionPane.ERROR_MESSAGE);
+                            "Error loading the game: " + e.getMessage(), "Error",
+                            JOptionPane.ERROR_MESSAGE);
                 }
             }
-            SystemSound loadGameSound = new SystemSound(new File("load-game.wav"));
-            loadGameSound.gameSounds();
         });
     }
 
@@ -164,6 +172,7 @@ public class ToolBar {
         theStart.addActionListener(theEvent -> {
             myMaze.startGame();
             myStatsPanel.getDisTimer().start();
+            myStatsPanel.setPlayerName("Enter your name: ");
             SystemSound sound = new SystemSound(new File("Game-Opener.wav"));
             sound.gameSounds();
             theStart.setEnabled(false);
