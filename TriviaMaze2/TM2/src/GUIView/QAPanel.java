@@ -195,4 +195,5 @@ public class QAPanel extends JPanel {
     public JPanel getQAPanel() {
         return myQAPanel;
     }
+    public void setMyCurrentMaze(Maze myCurrentMaze) {this.myCurrentMaze=myCurrentMaze; }
 }

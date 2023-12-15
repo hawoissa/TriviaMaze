@@ -194,9 +194,10 @@ public class Maze implements Serializable, MazeInterface {
      * Sets the game to save.
      * @param theFilePath is the other file.
      */
-    public void saveGame (String theFilePath){
+    public void saveGame(String theFilePath) {
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(theFilePath))) {
-            resetGame();
+            // Do not reset the game state before saving
+            myIsGameStarted=false;
             out.writeObject(this);
         } catch (IOException e) {
             e.printStackTrace();
@@ -208,10 +209,12 @@ public class Maze implements Serializable, MazeInterface {
      * @param theFilePath is the other file.
      * @return returns the maze object to deserialize.
      */
-    public Maze loadGame(String theFilePath){
-        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(theFilePath))) {
-            startGame();
-            return (Maze) in.readObject();
+    public Maze loadGame(String theFilePath) {
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(theFilePath+".ser"))) {
+            Maze loadedMaze = (Maze) in.readObject();
+            myIsGameStarted = true;
+
+            return loadedMaze;
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }

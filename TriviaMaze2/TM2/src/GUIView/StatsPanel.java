@@ -81,7 +81,6 @@ public class StatsPanel extends JPanel {
      * Label displaying the number of doors unlocked in the current room.
      */
     private JLabel chancesLabel;
-
     /**
      * Constructs a StatsPanel object with the given maze.
      *
@@ -171,5 +170,25 @@ public class StatsPanel extends JPanel {
      */
     public Timer getDisTimer() {
         return myDisTimer;
+    }
+
+    public void setChancesLabel() {
+        int maxCharactersPerLine = 30;
+        String formattedText = "<html>" + "<br>Doors unlocked: " +
+                myCurrentMaze.getMyCurrentRoom().getDoors() + "</html>";
+        chancesLabel.setText(formattedText);
+
+        if (myCurrentMaze.isGameOn()) {
+            myDisTimer.start();
+        }
+    }
+
+    public void setPlayerName(String question) {
+        String playerName = JOptionPane.showInputDialog(question);
+        if (playerName != null && !playerName.isEmpty()) {
+            playerNameLabel.setText("Player: " + playerName);
+        } else {
+            playerNameLabel.setText("Player: [Default Name]");
+        }
     }
 }
