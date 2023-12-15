@@ -21,7 +21,7 @@ public class MazePanel extends JPanel {
     private JPanel myMazePanel;
     private QAPanel myCurrentQAPanel;
 
-
+    private StatsPanel myStatsPanel;
     private JButton myButton = new JButton("arrow");
     Maze myMaze;
     private static final char[][] letterGrid = {
@@ -32,9 +32,9 @@ public class MazePanel extends JPanel {
     };
 
 
-    public MazePanel( final Maze theMaze, final QAPanel theQAPanel) throws IOException {
+    public MazePanel( final Maze theMaze, final QAPanel theQAPanel, final StatsPanel theStatsPanel) throws IOException {
         myMaze = theMaze;
-
+        myStatsPanel=theStatsPanel;
         myCurrentQAPanel = theQAPanel;
         myMazePanel = new JPanel();
         GridLayout myGD = new GridLayout(4, 4);
@@ -96,6 +96,7 @@ public class MazePanel extends JPanel {
             }
         }
         myCurrentQAPanel.updateContent();
+        myStatsPanel.setChancesLabel();
         myMazePanel.revalidate();
         myMazePanel.repaint();
     }
@@ -219,5 +220,8 @@ public class MazePanel extends JPanel {
     }
     public Maze getMyMaze () {
         return myMaze;
+    }
+    public void setMyMaze(Maze theMaze) {
+        this.myMaze = theMaze;
     }
 }
